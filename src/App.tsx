@@ -8,6 +8,7 @@ type tileType = {
   rows: number
   cols: number
   position: positionType
+  tileArr: Array<string>
 }
 
 export type playerBoardType = Array<playerTileType>
@@ -38,21 +39,37 @@ export const App = () => {
     { id: 17, rows: 2, cols: 2, position: { x: 200, y: 400 } },
   ]
 
-  const generatePlayerBoard = (board: boardType) => {
-    const tempArr = []
-    for (let i = 0; i < board.length; i++) {
-      const tileArrLength = board[i].rows * board[i].cols
-      tempArr.push({ id: i + 1, tile: new Array(tileArrLength).fill("") })
-    }
-    return tempArr
+  // const generatePlayerBoard = (board: boardType) => {
+  //   const tempArr = []
+  //   for (let i = 0; i < board.length; i++) {
+  //     const tileArrLength = board[i].rows * board[i].cols
+  //     tempArr.push({ id: i + 1, tile: new Array(tileArrLength).fill("") })
+  //   }
+  //   return tempArr
+  // }
+
+  // const playerBoard = generatePlayerBoard(board)
+
+  const updateGameBoardWithPlayerTiles = (board: boardType) => {
+    board = board.map((item) => {
+      const tempTileArr = new Array(item.rows * item.cols).fill("")
+      return {
+        ...item,
+        tileArr: tempTileArr,
+      }
+    })
+    return board
   }
 
-  const playerBoard = generatePlayerBoard(board)
+  const updatedGameBoard = updateGameBoardWithPlayerTiles(board)
 
   return (
     <div {...stylex.props(styles.base)}>
       <div> Title: Kulami </div>
-      <Board gameBoard={board} playerBoard={playerBoard} />
+      <Board
+        gameBoard={updatedGameBoard}
+        // playerBoard={playerBoard}
+      />
     </div>
   )
 }

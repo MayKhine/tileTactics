@@ -1,31 +1,30 @@
 import { useState } from "react"
-import { boardType, playerBoardType } from "./App"
+import { boardType } from "./App"
 import { Tile } from "./Title"
 import * as stylex from "@stylexjs/stylex"
 
 type BoardProps = {
   gameBoard: boardType
-  playerBoard: playerBoardType
 }
-export const Board = ({ gameBoard, playerBoard }: BoardProps) => {
+export const Board = ({ gameBoard }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
-  const [playingBoard, setPlayingBoard] = useState(playerBoard)
+  const [GameBoard, setGameBoard] = useState(gameBoard)
 
   const clickHandler = (id: number, index: number) => {
     const userColor = user == true ? "red" : "black"
     setUser(!user)
 
-    const newTileArr = playingBoard[id - 1].tile
+    console.log("id: ", id, index)
+    const newTileArr = GameBoard[id - 1].tileArr
     newTileArr[index] = userColor
-    console.log(newTileArr)
 
-    setPlayingBoard((prevData) => {
+    setGameBoard((prevData) => {
       const tempArr = prevData
-      tempArr[id - 1].tile = newTileArr
+      tempArr[id - 1].tileArr = newTileArr
       return tempArr
     })
 
-    // console.log("What is current palyign board", playingBoard)
+    console.log("Game board", GameBoard)
   }
 
   return (
@@ -38,6 +37,7 @@ export const Board = ({ gameBoard, playerBoard }: BoardProps) => {
           position={tile.position}
           id={tile.id}
           clickHandler={clickHandler}
+          tileArr={tile.tileArr}
         />
       ))}
     </div>

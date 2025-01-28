@@ -6,21 +6,30 @@ type TileProps = {
   position: positionType
   id: number
   clickHandler: (id: number, index: number) => void
+  tileArr: Array<string>
 }
 
 export type positionType = {
   x: number
   y: number
 }
-export const Tile = ({ rows, cols, position, clickHandler, id }: TileProps) => {
+export const Tile = ({
+  rows,
+  cols,
+  position,
+  clickHandler,
+  id,
+  tileArr,
+}: TileProps) => {
   return (
     <div {...stylex.props(styles.tile(rows, cols, position))}>
       {Array.from({ length: rows * cols }).map((_, index) => (
         <div key={index} {...stylex.props(styles.cell)}>
           <div
-            {...stylex.props(styles.circle)}
+            {...stylex.props(styles.circle(tileArr[index]))}
             onClick={() => {
               clickHandler(id, index)
+              // console.log("tileArr: ", tileArr[index])
             }}
           />
         </div>
@@ -56,11 +65,12 @@ const styles = stylex.create({
     // height: "50px",
     borderCollapse: "collapse",
   },
-  circle: {
+  circle: (color: string) => ({
     width: "1.5rem",
     height: "1.5rem",
     borderRadius: "50%",
-    backgroundColor: "gray",
+    backgroundColor:
+      color === "black" ? "black" : color === "red" ? "red" : "gray",
     cursor: "pointer",
-  },
+  }),
 })
