@@ -29,7 +29,6 @@ export const Tile = ({
             {...stylex.props(styles.circle(tileArr[index]))}
             onClick={() => {
               clickHandler(id, index)
-              // console.log("tileArr: ", tileArr[index])
             }}
           />
         </div>
