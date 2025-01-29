@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { MarbleCell } from "./MarbleCell"
 
 type TileProps = {
   rows: number
@@ -13,6 +14,13 @@ type TileProps = {
     position: positionType
   ) => void
   tileArr: Array<string>
+  calculateXy: (
+    index: number,
+    rows: number,
+    cols: number,
+    x: number,
+    y: number
+  ) => { x: number; y: number }
 }
 
 export type positionType = {
@@ -26,18 +34,22 @@ export const Tile = ({
   clickHandler,
   id,
   tileArr,
+  calculateXy,
 }: TileProps) => {
   return (
     <div {...stylex.props(styles.tile(rows, cols, position))}>
       {Array.from({ length: rows * cols }).map((_, index) => (
-        <div key={index} {...stylex.props(styles.cell)}>
-          <div
-            {...stylex.props(styles.circle(tileArr[index]))}
-            onClick={() => {
-              clickHandler(id, index, rows, cols, position)
-            }}
-          />
-        </div>
+        <MarbleCell
+          key={id + index}
+          id={id}
+          index={index}
+          calculateXy={calculateXy}
+          clickHandler={clickHandler}
+          cols={cols}
+          rows={rows}
+          position={position}
+          tileColor={tileArr[index]}
+        />
       ))}
     </div>
   )

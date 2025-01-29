@@ -98,6 +98,7 @@ export const Board = ({ board }: BoardProps) => {
             id={tile.id}
             clickHandler={clickHandler}
             tileArr={tile.tileArr}
+            calculateXY={calculateXY}
           />
         ))}
       </div>
