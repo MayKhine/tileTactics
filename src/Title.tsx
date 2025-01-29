@@ -5,7 +5,13 @@ type TileProps = {
   cols: number
   position: positionType
   id: number
-  clickHandler: (id: number, index: number) => void
+  clickHandler: (
+    id: number,
+    index: number,
+    row: number,
+    col: number,
+    position: positionType
+  ) => void
   tileArr: Array<string>
 }
 
@@ -28,7 +34,7 @@ export const Tile = ({
           <div
             {...stylex.props(styles.circle(tileArr[index]))}
             onClick={() => {
-              clickHandler(id, index)
+              clickHandler(id, index, rows, cols, position)
             }}
           />
         </div>
@@ -40,7 +46,7 @@ export const Tile = ({
 const styles = stylex.create({
   tile: (rows, cols, position) => ({
     display: "grid",
-    gridTemplateRows: `repeat(${rows}, 50px)`,
+    gridTemplaterow: `repeat(${rows}, 50px)`,
     gridTemplateColumns: `repeat(${cols}, 50px)`,
     position: "absolute",
     left: position.x,

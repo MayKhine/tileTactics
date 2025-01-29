@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { boardType } from "./App"
-import { Tile } from "./Title"
+import { positionType, Tile } from "./Title"
 import * as stylex from "@stylexjs/stylex"
 
 type BoardProps = {
@@ -10,11 +10,50 @@ export const Board = ({ board }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const [gameBoard, setGameBoard] = useState(board)
   const [errorMsg, setErrorMsg] = useState("")
-  const [playersTiles, setPlayersTile] = useState({ red: 1, black: 2 })
+  const [playersTiles, setPlayersTile] = useState({ red: -1, black: -1 })
+  const [lastMove, setLastMove] = useState({ x: -1, y: -1 })
 
-  const clickHandler = (id: number, index: number) => {
+  const calculateXY = (
+    index: number,
+    rows: number,
+    cols: number,
+    x: number,
+    y: number
+  ) => {
+    let tempCol = 0
+    let tempX = x
+    let tempY = y
+
+    for (let curRow = 0; curRow < rows; curRow++) {
+      for (let curCol = 0; curCol < cols; curCol++) {
+        if (index === curCol + tempCol) {
+          tempX = tempX + curCol * 50
+          return { x: tempX, y: tempY }
+        }
+      }
+      tempCol = tempCol + cols
+      tempY = tempY + 50
+    }
+
+    return { x, y }
+  }
+
+  const clickHandler = (
+    id: number,
+    index: number,
+    rows: number,
+    cols: number,
+    position: positionType
+  ) => {
+    const selectedCellPosition = calculateXY(
+      index,
+      rows,
+      cols,
+      position.x,
+      position.y
+    )
+
     const userColor = user == true ? "red" : "black"
-
     //check if user is already owns this tile
     if (playersTiles.black === id || playersTiles.red === id) {
       console.log("user already own this shit")
@@ -22,24 +61,27 @@ export const Board = ({ board }: BoardProps) => {
       return
     }
 
-    setPlayersTile((prevData) => {
-      setErrorMsg("")
-      return { ...prevData, [userColor]: id }
-    })
-    console.log("What is palyers tile ", playersTiles)
-
-    setUser(!user)
-    //get a copy of the tile
-    const newTileArr = gameBoard[id - 1].tileArr
-    newTileArr[index] = userColor
-
-    setGameBoard((prevData) => {
-      const tempArr = prevData
-      tempArr[id - 1].tileArr = newTileArr
-      return tempArr
-    })
-
-    console.log("Game board", gameBoard)
+    if (
+      lastMove.x == -1 ||
+      lastMove.y == -1 ||
+      selectedCellPosition.x == lastMove.x ||
+      selectedCellPosition.y == lastMove.y
+    ) {
+      setPlayersTile((prevData) => {
+        setErrorMsg("")
+        return { ...prevData, [userColor]: id }
+      })
+      setUser(!user)
+      //get a copy of the tile
+      const newTileArr = gameBoard[id - 1].tileArr
+      newTileArr[index] = userColor
+      setGameBoard((prevData) => {
+        const tempArr = prevData
+        tempArr[id - 1].tileArr = newTileArr
+        return tempArr
+      })
+      setLastMove(selectedCellPosition)
+    }
   }
 
   return (
