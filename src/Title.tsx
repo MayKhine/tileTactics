@@ -14,13 +14,14 @@ type TileProps = {
     position: positionType
   ) => void
   tileArr: Array<string>
-  calculateXy: (
+  calculateXY: (
     index: number,
     rows: number,
     cols: number,
     x: number,
     y: number
   ) => { x: number; y: number }
+  lastMove: { x: number; y: number }
 }
 
 export type positionType = {
@@ -34,7 +35,8 @@ export const Tile = ({
   clickHandler,
   id,
   tileArr,
-  calculateXy,
+  calculateXY,
+  lastMove,
 }: TileProps) => {
   return (
     <div {...stylex.props(styles.tile(rows, cols, position))}>
@@ -43,12 +45,13 @@ export const Tile = ({
           key={id + index}
           id={id}
           index={index}
-          calculateXy={calculateXy}
+          calculateXY={calculateXY}
           clickHandler={clickHandler}
           cols={cols}
           rows={rows}
           position={position}
           tileColor={tileArr[index]}
+          lastMove={lastMove}
         />
       ))}
     </div>
@@ -69,25 +72,6 @@ const styles = stylex.create({
     boxSizing: "border-box",
     width: `calc(${cols} * 50px)`,
     height: `calc(${rows} * 50px)`,
-    backgroundColor: "#FFF7E2",
-  }),
-  cell: {
-    // border: "3px solid gray",
-    margin: "0",
-    boxSizing: "border-box",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    // width: "50px",
-    // height: "50px",
-    borderCollapse: "collapse",
-  },
-  circle: (color: string) => ({
-    width: "1.5rem",
-    height: "1.5rem",
-    borderRadius: "50%",
-    backgroundColor:
-      color === "black" ? "black" : color === "red" ? "red" : "gray",
-    cursor: "pointer",
+    backgroundColor: "white",
   }),
 })
