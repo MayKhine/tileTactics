@@ -7,11 +7,37 @@ import { InvalidMoveAlert } from "./InvalidMoveAlert"
 type BoardProps = {
   board: boardType
 }
+
+export const calculateXY = (
+  index: number,
+  rows: number,
+  cols: number,
+  x: number,
+  y: number
+) => {
+  let tempCol = 0
+  let tempX = x
+  let tempY = y
+
+  for (let curRow = 0; curRow < rows; curRow++) {
+    for (let curCol = 0; curCol < cols; curCol++) {
+      if (index === curCol + tempCol) {
+        tempX = tempX + curCol * 50
+        return { x: tempX, y: tempY }
+      }
+    }
+    tempCol = tempCol + cols
+    tempY = tempY + 50
+  }
+
+  return { x, y }
+}
+
 export const Board = ({ board }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const [gameBoard, setGameBoard] = useState(board)
   const [validMove, setValidMove] = useState(true)
-
+  const [gameOver, setGameOver] = useState(false)
   const [playersTiles, setPlayersTile] = useState({
     red: {
       id: -1,
@@ -27,31 +53,6 @@ export const Board = ({ board }: BoardProps) => {
 
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
-  const calculateXY = (
-    index: number,
-    rows: number,
-    cols: number,
-    x: number,
-    y: number
-  ) => {
-    let tempCol = 0
-    let tempX = x
-    let tempY = y
-
-    for (let curRow = 0; curRow < rows; curRow++) {
-      for (let curCol = 0; curCol < cols; curCol++) {
-        if (index === curCol + tempCol) {
-          tempX = tempX + curCol * 50
-          return { x: tempX, y: tempY }
-        }
-      }
-      tempCol = tempCol + cols
-      tempY = tempY + 50
-    }
-
-    return { x, y }
-  }
-
   // works for it works one click late
   let validMoves = 0
   const validMovesHandler = () => {
@@ -62,9 +63,41 @@ export const Board = ({ board }: BoardProps) => {
     validMoves = validMoves + 1
   }
 
-  const checkValidMovesLeft = (id, x, y) => {
-    console.log("check valid moves left", id, x, y)
+  const checkValidMovesLeft = (
+    id: number,
+    positionX: number,
+    positionY: number
+  ) => {
+    for (let i = 0; i < board.length; i++) {
+      for (let z = 0; z < board[i].tileArr.length; z++) {
+        if (
+          (board[i].tileArr[z].x === positionX &&
+            board[i].tileArr[z].owner.length === 0 &&
+            board[i].id != id &&
+            lastMove.id != board[i].id) ||
+          (board[i].tileArr[z].y === positionY &&
+            board[i].tileArr[z].owner.length === 0 &&
+            board[i].id != id &&
+            lastMove.id != board[i].id)
+        ) {
+          console.log(
+            board[i].tileArr[z].x,
+            positionX,
+            board[i].tileArr[z].owner,
+            board[i].tileArr[z].y,
+            positionY,
+            board[i].tileArr[z].owner
+          )
+          return true
+        }
+      }
+    }
+    setGameOver(() => {
+      return true
+    })
+    return false
   }
+
   const clickHandler = (
     id: number,
     index: number,
@@ -89,7 +122,7 @@ export const Board = ({ board }: BoardProps) => {
         lastMove.y == -1 ||
         selectedCellPosition.x == lastMove.x ||
         selectedCellPosition.y == lastMove.y) &&
-      gameBoard[id - 1].tileArr[index].length === 0
+      gameBoard[id - 1].tileArr[index].owner.length === 0
     ) {
       setPlayersTile((prevData) => {
         setValidMove(true)
@@ -106,18 +139,20 @@ export const Board = ({ board }: BoardProps) => {
       setUser(!user)
       //get a copy of the tile
       const newTileArr = gameBoard[id - 1].tileArr
-      newTileArr[index] = userColor
+      newTileArr[index].owner = userColor
       setGameBoard((prevData) => {
         const tempArr = prevData
         tempArr[id - 1].tileArr = newTileArr
         return tempArr
       })
-      setLastMove(() => {
-        return { ...selectedCellPosition, id: id }
-      })
-
-      return
-      //check if there's still valid moves to make more
+      if (
+        checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
+      ) {
+        setLastMove(() => {
+          return { ...selectedCellPosition, id: id }
+        })
+        return
+      }
     } else {
       setValidMove(false)
       setTimeout(() => setValidMove(true), 5000)
@@ -135,7 +170,8 @@ export const Board = ({ board }: BoardProps) => {
         />
       )}
       <div> User: {user == true ? "Red" : "Black"}</div>
-      <div {...stylex.props(styles.board)}>
+      {gameOver && <div> GAME OVER</div>}
+      <div {...stylex.props(styles.board(gameOver))}>
         {gameBoard.map((tile) => (
           <Tile
             key={tile.id}
@@ -158,9 +194,10 @@ export const Board = ({ board }: BoardProps) => {
 }
 
 const styles = stylex.create({
-  board: {
+  board: (gameOver: boolean) => ({
+    pointerEvents: gameOver == true ? "none" : "all",
     position: "relative",
     height: "100%",
     boxSizing: "border-box",
-  },
+  }),
 })

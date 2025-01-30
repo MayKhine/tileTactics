@@ -53,7 +53,7 @@ export const MarbleCell = ({
     (result.x == lastMove.x || result.y == lastMove.y) &&
     playersTile.red.id != id &&
     playersTile.black.id != id &&
-    gameBoard[id - 1].tileArr[index].length === 0
+    gameBoard[id - 1].tileArr[index].owner.length === 0
   ) {
     highlightValidMove = true
     validMovesHandler()
