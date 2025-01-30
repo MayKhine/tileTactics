@@ -11,7 +11,7 @@ export const Board = ({ board }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const [gameBoard, setGameBoard] = useState(board)
   const [validMove, setValidMove] = useState(true)
-  // const [playersTiles, setPlayersTile] = useState({ red: -1, black: -1 })
+
   const [playersTiles, setPlayersTile] = useState({
     red: {
       id: -1,
@@ -26,6 +26,7 @@ export const Board = ({ board }: BoardProps) => {
   })
 
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
+
   const calculateXY = (
     index: number,
     rows: number,
@@ -51,6 +52,19 @@ export const Board = ({ board }: BoardProps) => {
     return { x, y }
   }
 
+  // works for it works one click late
+  let validMoves = 0
+  const validMovesHandler = () => {
+    // console.log("valid move handler ")
+    // if (!validMovesLeft) {
+    //   setValidMovesLeft(true)
+    // }
+    validMoves = validMoves + 1
+  }
+
+  const checkValidMovesLeft = (id, x, y) => {
+    console.log("check valid moves left", id, x, y)
+  }
   const clickHandler = (
     id: number,
     index: number,
@@ -101,6 +115,7 @@ export const Board = ({ board }: BoardProps) => {
       setLastMove(() => {
         return { ...selectedCellPosition, id: id }
       })
+
       return
       //check if there's still valid moves to make more
     } else {
@@ -134,6 +149,7 @@ export const Board = ({ board }: BoardProps) => {
             lastMove={lastMove}
             playersTile={playersTiles}
             gameBoard={gameBoard}
+            validMovesHandler={validMovesHandler}
           />
         ))}
       </div>

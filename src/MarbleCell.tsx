@@ -30,6 +30,7 @@ type MarbelCellProps = {
     black: { id: number; x: number; y: number }
   }
   gameBoard: boardType
+  validMovesHandler: () => void
 }
 
 export const MarbleCell = ({
@@ -44,6 +45,7 @@ export const MarbleCell = ({
   lastMove,
   playersTile,
   gameBoard,
+  validMovesHandler,
 }: MarbelCellProps) => {
   let highlightValidMove = false
   const result = calculateXY(index, rows, cols, position.x, position.y)
@@ -54,6 +56,7 @@ export const MarbleCell = ({
     gameBoard[id - 1].tileArr[index].length === 0
   ) {
     highlightValidMove = true
+    validMovesHandler()
   }
 
   const lastRedMove =
