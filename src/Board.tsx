@@ -103,11 +103,11 @@ export const Board = ({ board }: BoardProps) => {
       })
       return
       //check if there's still valid moves to make more
+    } else {
+      setValidMove(false)
+      setTimeout(() => setValidMove(true), 5000)
+      return
     }
-
-    setValidMove(false)
-    setTimeout(() => setValidMove(true), 5000)
-    return
   }
 
   return (
@@ -133,6 +133,7 @@ export const Board = ({ board }: BoardProps) => {
             calculateXY={calculateXY}
             lastMove={lastMove}
             playersTile={playersTiles}
+            gameBoard={gameBoard}
           />
         ))}
       </div>

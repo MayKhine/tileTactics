@@ -10,7 +10,6 @@ type tileType = {
   cols: number
   position: positionType
   tileArr: Array<string>
-  // curOwner: string
 }
 
 export const App = () => {

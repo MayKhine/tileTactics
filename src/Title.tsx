@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { MarbleCell } from "./MarbleCell"
+import { boardType } from "./App"
 
 type TileProps = {
   rows: number
@@ -26,6 +27,7 @@ type TileProps = {
     red: { id: number; x: number; y: number }
     black: { id: number; x: number; y: number }
   }
+  gameBoard: boardType
 }
 
 export type positionType = {
@@ -42,6 +44,7 @@ export const Tile = ({
   calculateXY,
   lastMove,
   playersTile,
+  gameBoard,
 }: TileProps) => {
   return (
     <div {...stylex.props(styles.tile(rows, cols, position))}>
@@ -58,6 +61,7 @@ export const Tile = ({
           tileColor={tileArr[index]}
           lastMove={lastMove}
           playersTile={playersTile}
+          gameBoard={gameBoard}
         />
       ))}
     </div>

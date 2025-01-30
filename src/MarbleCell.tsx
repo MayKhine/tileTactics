@@ -1,3 +1,4 @@
+import { boardType } from "./App"
 import { positionType } from "./Title"
 import * as stylex from "@stylexjs/stylex"
 type MarbelCellProps = {
@@ -28,6 +29,7 @@ type MarbelCellProps = {
     red: { id: number; x: number; y: number }
     black: { id: number; x: number; y: number }
   }
+  gameBoard: boardType
 }
 
 export const MarbleCell = ({
@@ -41,22 +43,30 @@ export const MarbleCell = ({
   calculateXY,
   lastMove,
   playersTile,
+  gameBoard,
 }: MarbelCellProps) => {
   let highlightValidMove = false
   const result = calculateXY(index, rows, cols, position.x, position.y)
-  if ((result.x == lastMove.x || result.y == lastMove.y) && lastMove.id != id) {
+  if (
+    (result.x == lastMove.x || result.y == lastMove.y) &&
+    playersTile.red.id != id &&
+    playersTile.black.id != id &&
+    gameBoard[id - 1].tileArr[index].length === 0
+  ) {
     highlightValidMove = true
   }
 
-  let lastRedMove =
+  const lastRedMove =
     result.x === playersTile.red.x && result.y === playersTile.red.y
       ? true
       : false
 
-  let lastBlackMove =
+  const lastBlackMove =
     result.x === playersTile.black.x && result.y === playersTile.black.y
       ? true
       : false
+
+  // console.log("gameBoard[id - 1].tileArr[id]", gameBoard[id - 1].tileArr[index])
   return (
     <div key={index} {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.cell(highlightValidMove))}>
@@ -82,12 +92,14 @@ export const MarbleCell = ({
           </div>
         )}
 
-        <div
-          {...stylex.props(styles.circle(tileColor))}
-          onClick={() => {
-            clickHandler(id, index, rows, cols, position)
-          }}
-        />
+        {lastBlackMove === false && lastRedMove === false && (
+          <div
+            {...stylex.props(styles.circle(tileColor))}
+            onClick={() => {
+              clickHandler(id, index, rows, cols, position)
+            }}
+          />
+        )}
       </div>
     </div>
   )
@@ -108,13 +120,11 @@ const styles = stylex.create({
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    // width: "50px",
-    // height: "50px",
-    width: "60%",
-    height: "60%",
+
+    width: "2rem",
+    height: "2rem",
     borderCollapse: "collapse",
-    backgroundColor: highlightValidMove === true ? "pink" : "white",
-    // backgroundColor: "white",
+    backgroundColor: highlightValidMove === true ? "lightGreen" : "white",
   }),
 
   circle: (color: string) => ({
@@ -124,10 +134,18 @@ const styles = stylex.create({
     backgroundColor:
       color === "black" ? "black" : color === "red" ? "red" : "gray",
     cursor: "pointer",
+    boxSizing: "border-box",
   }),
   circleRing: {
-    border: "3px solid black",
+    border: "2px solid yellow",
     borderRadius: "50%",
-    padding: ".2rem",
+    backgroundColor: "pink",
+    boxSizing: "border-box",
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    justifyItems: "center",
+    alignSelf: "center",
   },
 })
