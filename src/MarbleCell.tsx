@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { positionType } from "./Title"
 import * as stylex from "@stylexjs/stylex"
 type MarbelCellProps = {
@@ -24,7 +23,7 @@ type MarbelCellProps = {
     y: number
   ) => { x: number; y: number }
 
-  lastMove: { x: number; y: number }
+  lastMove: { x: number; y: number; id: number }
 }
 
 export const MarbleCell = ({
@@ -40,7 +39,7 @@ export const MarbleCell = ({
 }: MarbelCellProps) => {
   let highlightValidMove = false
   const result = calculateXY(index, rows, cols, position.x, position.y)
-  if (result.x == lastMove.x || result.y == lastMove.y) {
+  if ((result.x == lastMove.x || result.y == lastMove.y) && lastMove.id != id) {
     highlightValidMove = true
   }
 

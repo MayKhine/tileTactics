@@ -21,7 +21,7 @@ type TileProps = {
     x: number,
     y: number
   ) => { x: number; y: number }
-  lastMove: { x: number; y: number }
+  lastMove: { x: number; y: number; id: number }
 }
 
 export type positionType = {

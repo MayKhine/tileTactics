@@ -12,7 +12,7 @@ export const Board = ({ board }: BoardProps) => {
   const [gameBoard, setGameBoard] = useState(board)
   const [validMove, setValidMove] = useState(true)
   const [playersTiles, setPlayersTile] = useState({ red: -1, black: -1 })
-  const [lastMove, setLastMove] = useState({ x: -1, y: -1 })
+  const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
   const calculateXY = (
     index: number,
@@ -66,7 +66,6 @@ export const Board = ({ board }: BoardProps) => {
       gameBoard[id - 1].tileArr[index].length === 0
     ) {
       setPlayersTile((prevData) => {
-        // setErrorMsg("")
         setValidMove(true)
         return { ...prevData, [userColor]: id }
       })
@@ -79,7 +78,9 @@ export const Board = ({ board }: BoardProps) => {
         tempArr[id - 1].tileArr = newTileArr
         return tempArr
       })
-      setLastMove(selectedCellPosition)
+      setLastMove(() => {
+        return { ...selectedCellPosition, id: id }
+      })
       return
       //check if there's still valid moves to make more
     }
