@@ -24,6 +24,10 @@ type MarbelCellProps = {
   ) => { x: number; y: number }
 
   lastMove: { x: number; y: number; id: number }
+  playersTile: {
+    red: { id: number; x: number; y: number }
+    black: { id: number; x: number; y: number }
+  }
 }
 
 export const MarbleCell = ({
@@ -36,6 +40,7 @@ export const MarbleCell = ({
   clickHandler,
   calculateXY,
   lastMove,
+  playersTile,
 }: MarbelCellProps) => {
   let highlightValidMove = false
   const result = calculateXY(index, rows, cols, position.x, position.y)
@@ -43,9 +48,40 @@ export const MarbleCell = ({
     highlightValidMove = true
   }
 
+  let lastRedMove =
+    result.x === playersTile.red.x && result.y === playersTile.red.y
+      ? true
+      : false
+
+  let lastBlackMove =
+    result.x === playersTile.black.x && result.y === playersTile.black.y
+      ? true
+      : false
   return (
     <div key={index} {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.cell(highlightValidMove))}>
+        {lastRedMove && (
+          <div {...stylex.props(styles.circleRing)}>
+            <div
+              {...stylex.props(styles.circle(tileColor))}
+              onClick={() => {
+                clickHandler(id, index, rows, cols, position)
+              }}
+            />
+          </div>
+        )}
+
+        {lastBlackMove && (
+          <div {...stylex.props(styles.circleRing)}>
+            <div
+              {...stylex.props(styles.circle(tileColor))}
+              onClick={() => {
+                clickHandler(id, index, rows, cols, position)
+              }}
+            />
+          </div>
+        )}
+
         <div
           {...stylex.props(styles.circle(tileColor))}
           onClick={() => {
@@ -89,4 +125,9 @@ const styles = stylex.create({
       color === "black" ? "black" : color === "red" ? "red" : "gray",
     cursor: "pointer",
   }),
+  circleRing: {
+    border: "3px solid black",
+    borderRadius: "50%",
+    padding: ".2rem",
+  },
 })

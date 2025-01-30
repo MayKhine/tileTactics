@@ -22,6 +22,10 @@ type TileProps = {
     y: number
   ) => { x: number; y: number }
   lastMove: { x: number; y: number; id: number }
+  playersTile: {
+    red: { id: number; x: number; y: number }
+    black: { id: number; x: number; y: number }
+  }
 }
 
 export type positionType = {
@@ -37,6 +41,7 @@ export const Tile = ({
   tileArr,
   calculateXY,
   lastMove,
+  playersTile,
 }: TileProps) => {
   return (
     <div {...stylex.props(styles.tile(rows, cols, position))}>
@@ -52,6 +57,7 @@ export const Tile = ({
           position={position}
           tileColor={tileArr[index]}
           lastMove={lastMove}
+          playersTile={playersTile}
         />
       ))}
     </div>

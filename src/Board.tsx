@@ -11,9 +11,21 @@ export const Board = ({ board }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const [gameBoard, setGameBoard] = useState(board)
   const [validMove, setValidMove] = useState(true)
-  const [playersTiles, setPlayersTile] = useState({ red: -1, black: -1 })
-  const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
+  // const [playersTiles, setPlayersTile] = useState({ red: -1, black: -1 })
+  const [playersTiles, setPlayersTile] = useState({
+    red: {
+      id: -1,
+      x: -1,
+      y: -1,
+    },
+    black: {
+      id: -1,
+      x: -1,
+      y: -1,
+    },
+  })
 
+  const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
   const calculateXY = (
     index: number,
     rows: number,
@@ -57,8 +69,8 @@ export const Board = ({ board }: BoardProps) => {
     const userColor = user == true ? "red" : "black"
 
     if (
-      playersTiles.black !== id &&
-      playersTiles.red !== id &&
+      playersTiles.black.id !== id &&
+      playersTiles.red.id !== id &&
       (lastMove.x == -1 ||
         lastMove.y == -1 ||
         selectedCellPosition.x == lastMove.x ||
@@ -67,7 +79,15 @@ export const Board = ({ board }: BoardProps) => {
     ) {
       setPlayersTile((prevData) => {
         setValidMove(true)
-        return { ...prevData, [userColor]: id }
+        // return { ...prevData, [userColor]: id }
+        return {
+          ...prevData,
+          [userColor]: {
+            id: id,
+            x: selectedCellPosition.x,
+            y: selectedCellPosition.y,
+          },
+        }
       })
       setUser(!user)
       //get a copy of the tile
@@ -112,6 +132,7 @@ export const Board = ({ board }: BoardProps) => {
             tileArr={tile.tileArr}
             calculateXY={calculateXY}
             lastMove={lastMove}
+            playersTile={playersTiles}
           />
         ))}
       </div>
