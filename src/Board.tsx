@@ -2,8 +2,8 @@ import { useState } from "react"
 import { boardType, tileType } from "./App"
 import { positionType, Tile } from "./Title"
 import * as stylex from "@stylexjs/stylex"
-import { InvalidMoveAlert } from "./InvalidMoveAlert"
 import { GameControlPanel } from "./GameControlPanel"
+import { Alert } from "./Alert"
 
 type BoardProps = {
   initialBoard: boardType
@@ -38,7 +38,6 @@ export const Board = ({ initialBoard }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const deepCopy = (data: boardType) => JSON.parse(JSON.stringify(data))
   const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
-  // const [gameBoard, setGameBoard] = useState(board)
   const [validMove, setValidMove] = useState(true)
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
@@ -91,7 +90,6 @@ export const Board = ({ initialBoard }: BoardProps) => {
       return {
         ...prev,
         gameStatus: "Ready to start",
-        // gameOver: false,
         redPoints: 0,
         blackPoints: 0,
         winner: "",
@@ -117,6 +115,7 @@ export const Board = ({ initialBoard }: BoardProps) => {
             gameBoard[i].id != id &&
             lastMove.id != gameBoard[i].id)
         ) {
+          setValidMove(true)
           return true
         }
       }
@@ -128,7 +127,9 @@ export const Board = ({ initialBoard }: BoardProps) => {
     setGame((prevData) => {
       return { ...prevData, gameStatus: "Over" }
     })
-    return false
+    setValidMove(false)
+    setTimeout(() => setValidMove(true), 5000)
+    return
   }
 
   const calculatePlayersPoint = () => {
@@ -200,7 +201,7 @@ export const Board = ({ initialBoard }: BoardProps) => {
       gameBoard[id - 1].tileArr[index].owner.length === 0
     ) {
       setPlayersTile((prevData) => {
-        setValidMove(true)
+        // setValidMove(true)
         // return { ...prevData, [userColor]: id }
         return {
           ...prevData,
@@ -211,9 +212,11 @@ export const Board = ({ initialBoard }: BoardProps) => {
           },
         }
       })
+
       setGame((prevData) => {
         return { ...prevData, gameStatus: "On" }
       })
+
       setUser(!user)
       //get a copy of the tile
       const newTileArr = gameBoard[id - 1].tileArr
@@ -227,10 +230,6 @@ export const Board = ({ initialBoard }: BoardProps) => {
           return tile
         })
       })
-
-      // console.log("new game board: ", newGameBoard[2].tileArr)
-      // console.log("Click handler gameboard: ", gameBoard[2].tileArr)
-      // console.log("initial board: ", initialBoard[2].tileArr)
 
       if (
         checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
@@ -250,46 +249,83 @@ export const Board = ({ initialBoard }: BoardProps) => {
   }
 
   return (
-    <div>
-      {!validMove && (
-        <InvalidMoveAlert
+    <div {...stylex.props(styles.base)}>
+      {!validMove && game.gameStatus != "Over" && (
+        <Alert
           closeAlert={() => {
             setValidMove(true)
           }}
+          text="Invalid Move"
         />
       )}
-      <GameControlPanel gameRestart={gameRestart} game={game} user={user} />
 
-      <div
-        {...stylex.props(
-          styles.board(game.gameStatus === "Over" ? true : false)
-        )}
-      >
-        {gameBoard.map((tile: tileType) => (
-          <Tile
-            key={tile.id}
-            rows={tile.rows}
-            cols={tile.cols}
-            position={tile.position}
-            id={tile.id}
-            clickHandler={clickHandler}
-            tileArr={tile.tileArr}
-            calculateXY={calculateXY}
-            lastMove={lastMove}
-            playersTile={playersTiles}
-            gameBoard={gameBoard}
-          />
-        ))}
+      {!validMove && game.gameStatus == "Over" && (
+        <Alert
+          closeAlert={() => {
+            setValidMove(true)
+          }}
+          text="Game Over"
+        />
+      )}
+      <div {...stylex.props(styles.gameControlPanelContainer)}>
+        <GameControlPanel gameRestart={gameRestart} game={game} user={user} />
+      </div>
+      <div {...stylex.props(styles.boardContainer)}>
+        <div
+          {...stylex.props(
+            styles.board(game.gameStatus === "Over" ? true : false)
+          )}
+        >
+          {gameBoard.map((tile: tileType) => (
+            <Tile
+              key={tile.id}
+              rows={tile.rows}
+              cols={tile.cols}
+              position={tile.position}
+              id={tile.id}
+              clickHandler={clickHandler}
+              tileArr={tile.tileArr}
+              calculateXY={calculateXY}
+              lastMove={lastMove}
+              playersTile={playersTiles}
+              gameBoard={gameBoard}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
 }
 
 const styles = stylex.create({
+  base: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "lightyellow",
+    display: "flex",
+    flexDirection: "column",
+  },
+  gameControlPanelContainer: {
+    width: "100%",
+    minHeight: "12rem",
+    backgroundColor: "orange",
+  },
+
+  boardContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "pink",
+    height: "100%",
+  },
+
   board: (gameOver: boolean) => ({
+    // border: "2px solid black",
     pointerEvents: gameOver == true ? "none" : "all",
     position: "relative",
-    height: "100%",
     boxSizing: "border-box",
+    width: "31.5rem",
+    height: "31.5rem",
+    backgroundColor: "white",
   }),
 })

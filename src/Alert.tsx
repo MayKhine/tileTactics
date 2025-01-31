@@ -1,16 +1,16 @@
 import * as stylex from "@stylexjs/stylex"
 
-type InvalidMoveAlertProps = {
+type alertProps = {
   closeAlert: () => void
+  text: string
 }
-export const InvalidMoveAlert = ({ closeAlert }: InvalidMoveAlertProps) => {
+export const Alert = ({ closeAlert, text }: alertProps) => {
   return (
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.textBox)}>
-        <div> Invalid Move</div>
+        <div> {text}</div>
         <div {...stylex.props(styles.button)} onClick={closeAlert}>
-          {" "}
-          Okay{" "}
+          Okay
         </div>
       </div>
     </div>
@@ -24,7 +24,6 @@ const styles = stylex.create({
     position: "fixed",
     top: "0",
     zIndex: "1",
-    // backgroundColor: "lightyellow",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

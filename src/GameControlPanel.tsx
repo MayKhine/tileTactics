@@ -19,11 +19,15 @@ export const GameControlPanel = ({
   return (
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
+        <div>Kulami</div>
         <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
           Restart
         </div>
         <div> Game Status: {game.gameStatus} </div>
-        <div> Player Turn: {user == true ? "Player 1" : "Player 2"}</div>
+        {game.gameStatus != "Over" && (
+          <div> Player Turn: {user == true ? "Player 1" : "Player 2"}</div>
+        )}
+
         {game.gameStatus == "Over" && (
           <div>
             <div> Winner: {game.winner}</div>
@@ -39,22 +43,22 @@ export const GameControlPanel = ({
 
 const styles = stylex.create({
   base: {
-    backgroundColor: "lightgray",
-    width: "100%",
+    // width: "100%",
+    minHeight: "8rem",
     display: "flex",
     justifyContent: "center",
+    margin: "2rem",
+    backgroundColor: "white",
   },
   controlPanel: {
-    padding: "1rem",
     backgroundColor: "gray",
-    // width: "max-content",
     minWidth: "14rem",
-    minHeight: "9rem",
   },
   restartButton: {
     cursor: "pointer",
+    borderRadius: "1rem",
     border: "1px solid black",
-    padding: "1rem",
+    padding: ".75rem",
     backgroundColor: {
       default: "white",
       ":hover": "lightgray",
