@@ -177,7 +177,7 @@ export const App = () => {
   return (
     <div {...stylex.props(styles.base)}>
       <div> Title: Kulami </div>
-      <Board board={updatedGameBoard2} />
+      <Board initialBoard={updatedGameBoard2} />
     </div>
   )
 }

@@ -5,7 +5,7 @@ import * as stylex from "@stylexjs/stylex"
 import { InvalidMoveAlert } from "./InvalidMoveAlert"
 
 type BoardProps = {
-  board: boardType
+  initialBoard: boardType
 }
 
 export const calculateXY = (
@@ -33,9 +33,11 @@ export const calculateXY = (
   return { x, y }
 }
 
-export const Board = ({ board }: BoardProps) => {
+export const Board = ({ initialBoard }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
-  const [gameBoard, setGameBoard] = useState([...board])
+  const deepCopy = (data: boardType) => JSON.parse(JSON.stringify(data))
+  const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
+
   const [validMove, setValidMove] = useState(true)
   const [game, setGame] = useState({
     gameOver: false,
@@ -59,26 +61,39 @@ export const Board = ({ board }: BoardProps) => {
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
   const gameRestart = () => {
-    console.log("game restart: ", gameBoard, board)
-    setGameBoard(() => [...board])
-    console.log("after: ", gameBoard)
+    setGameBoard(() => [...initialBoard])
+    setUser(true)
+    setValidMove(true)
+    setPlayersTile({
+      red: {
+        id: -1,
+        x: -1,
+        y: -1,
+      },
+      black: {
+        id: -1,
+        x: -1,
+        y: -1,
+      },
+    })
+    setLastMove({ x: -1, y: -1, id: -1 })
   }
   const checkValidMovesLeft = (
     id: number,
     positionX: number,
     positionY: number
   ) => {
-    for (let i = 0; i < board.length; i++) {
-      for (let z = 0; z < board[i].tileArr.length; z++) {
+    for (let i = 0; i < gameBoard.length; i++) {
+      for (let z = 0; z < gameBoard[i].tileArr.length; z++) {
         if (
-          (board[i].tileArr[z].x === positionX &&
-            board[i].tileArr[z].owner.length === 0 &&
-            board[i].id != id &&
-            lastMove.id != board[i].id) ||
-          (board[i].tileArr[z].y === positionY &&
-            board[i].tileArr[z].owner.length === 0 &&
-            board[i].id != id &&
-            lastMove.id != board[i].id)
+          (gameBoard[i].tileArr[z].x === positionX &&
+            gameBoard[i].tileArr[z].owner.length === 0 &&
+            gameBoard[i].id != id &&
+            lastMove.id != gameBoard[i].id) ||
+          (gameBoard[i].tileArr[z].y === positionY &&
+            gameBoard[i].tileArr[z].owner.length === 0 &&
+            gameBoard[i].id != id &&
+            lastMove.id != gameBoard[i].id)
         ) {
           // console.log(
           //   board[i].tileArr[z].x,
@@ -99,25 +114,25 @@ export const Board = ({ board }: BoardProps) => {
     return false
   }
 
-  const calculatePlayersPoint = (board: boardType) => {
+  const calculatePlayersPoint = () => {
     let totalRedPoints = 0
     let totalBlackPoints = 0
-    for (let i = 0; i < board.length; i++) {
+    for (let i = 0; i < gameBoard.length; i++) {
       let tempRedPoints = 0
       let tempBlackPoints = 0
-      for (let x = 0; x < board[i].tileArr.length; x++) {
-        if (board[i].tileArr[x].owner == "red") {
+      for (let x = 0; x < gameBoard[i].tileArr.length; x++) {
+        if (gameBoard[i].tileArr[x].owner == "red") {
           tempRedPoints = tempRedPoints + 1
         }
-        if (board[i].tileArr[x].owner == "black") {
+        if (gameBoard[i].tileArr[x].owner == "black") {
           tempBlackPoints = tempBlackPoints + 1
         }
       }
       if (tempBlackPoints > tempRedPoints) {
-        totalBlackPoints = totalBlackPoints + board[i].tileArr.length
+        totalBlackPoints = totalBlackPoints + gameBoard[i].tileArr.length
       }
       if (tempRedPoints > tempBlackPoints) {
-        totalRedPoints = totalRedPoints + board[i].tileArr.length
+        totalRedPoints = totalRedPoints + gameBoard[i].tileArr.length
       }
     }
     // return { red: totalRedPoints, black: totalBlackPoints }
@@ -183,6 +198,17 @@ export const Board = ({ board }: BoardProps) => {
         tempArr[id - 1].tileArr = newTileArr
         return tempArr
       })
+
+      // setGameBoard((prevData) => {
+      //   return prevData.map((tile, index) => {
+      //     if (index === id - 1) {
+      //       return { ...tile, tileArr: [...newTileArr] }
+      //     }
+      //     return tile
+      //   })
+      // })
+
+      console.log("initial board: ", initialBoard[0].tileArr)
       if (
         checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
       ) {
@@ -191,7 +217,7 @@ export const Board = ({ board }: BoardProps) => {
         })
         return
       } else {
-        calculatePlayersPoint(board)
+        calculatePlayersPoint()
       }
     } else {
       setValidMove(false)
@@ -211,7 +237,6 @@ export const Board = ({ board }: BoardProps) => {
       )}
       <div>
         <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
-          {" "}
           Restart
         </div>
         <div> User: {user == true ? "Red" : "Black"}</div>
