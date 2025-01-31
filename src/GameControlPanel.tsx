@@ -19,20 +19,32 @@ export const GameControlPanel = ({
   return (
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
-        <div>Kulami</div>
-        <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
-          Restart
+        <div {...stylex.props(styles.restartButtonContainer)}>
+          <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
+            Restart
+          </div>
         </div>
-        <div> Game Status: {game.gameStatus} </div>
+        <div {...stylex.props(styles.spaceBetweenContainer)}>
+          <div>Game Status: </div>
+          <div>{game.gameStatus}</div>
+        </div>
         {game.gameStatus != "Over" && (
-          <div> Player Turn: {user == true ? "Player 1" : "Player 2"}</div>
+          <div {...stylex.props(styles.spaceBetweenContainer)}>
+            <div> Player Turn: </div>{" "}
+            <div>{user == true ? "Player 1" : "Player 2"} </div>
+          </div>
         )}
 
         {game.gameStatus == "Over" && (
           <div>
             <div> Winner: {game.winner}</div>
-            <div>
-              Player 1: {game.redPoints} , Player 2: {game.blackPoints}
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
+              <div {...stylex.props(styles.playerPoints)}>
+                Player 1: {game.redPoints}
+              </div>
+              <div {...stylex.props(styles.playerPoints)}>
+                Player 2: {game.blackPoints}
+              </div>
             </div>
           </div>
         )}
@@ -43,27 +55,40 @@ export const GameControlPanel = ({
 
 const styles = stylex.create({
   base: {
-    // width: "100%",
-    minHeight: "8rem",
+    minHeight: "7.5rem",
     display: "flex",
     justifyContent: "center",
-    margin: "2rem",
-    backgroundColor: "white",
+    fontSize: ".8rem",
   },
   controlPanel: {
-    backgroundColor: "gray",
-    minWidth: "14rem",
+    // backgroundColor: "gray",
+    minWidth: "12rem",
+  },
+  restartButtonContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: ".5rem",
   },
   restartButton: {
     cursor: "pointer",
-    borderRadius: "1rem",
-    border: "1px solid black",
-    padding: ".75rem",
+    borderRadius: ".5rem",
+    border: "2px solid black",
+    padding: ".5rem",
     backgroundColor: {
       default: "white",
       ":hover": "lightgray",
     },
-
     width: "max-content",
+  },
+  spaceBetweenContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+  },
+  playerPoints: {
+    // backgroundColor: "white",
   },
 })

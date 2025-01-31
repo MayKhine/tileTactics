@@ -267,6 +267,7 @@ export const Board = ({ initialBoard }: BoardProps) => {
           text="Game Over"
         />
       )}
+      <div {...stylex.props(styles.title)}>Kulami</div>
       <div {...stylex.props(styles.gameControlPanelContainer)}>
         <GameControlPanel gameRestart={gameRestart} game={game} user={user} />
       </div>
@@ -307,7 +308,6 @@ const styles = stylex.create({
   },
   gameControlPanelContainer: {
     width: "100%",
-    minHeight: "12rem",
     backgroundColor: "orange",
   },
 
@@ -328,4 +328,15 @@ const styles = stylex.create({
     height: "31.5rem",
     backgroundColor: "white",
   }),
+  title: {
+    fontSize: "4rem",
+    width: "100%",
+    backgroundColor: "white",
+    textAlign: "center",
+    fontFamily: "Long Cang",
+    fontWeight: "500",
+    fontStyle: "normal",
+    marginBottom: ".5rem",
+    lineHeight: "4rem",
+  },
 })

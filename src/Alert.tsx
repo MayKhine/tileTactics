@@ -27,6 +27,7 @@ const styles = stylex.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    fontSize: ".8rem",
   },
   textBox: {
     border: "2px solid black",
