@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { boardType } from "./App"
+import { boardType, tileType } from "./App"
 import { positionType, Tile } from "./Title"
 import * as stylex from "@stylexjs/stylex"
 import { InvalidMoveAlert } from "./InvalidMoveAlert"
+import { GameControlPanel } from "./GameControlPanel"
 
 type BoardProps = {
   initialBoard: boardType
@@ -37,10 +38,11 @@ export const Board = ({ initialBoard }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const deepCopy = (data: boardType) => JSON.parse(JSON.stringify(data))
   const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
-
+  // const [gameBoard, setGameBoard] = useState(board)
   const [validMove, setValidMove] = useState(true)
   const [game, setGame] = useState({
-    gameOver: false,
+    gameStatus: "Ready to start",
+    // gameOver: false,
     redPoints: 0,
     blackPoints: 0,
     winner: "",
@@ -61,22 +63,42 @@ export const Board = ({ initialBoard }: BoardProps) => {
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
   const gameRestart = () => {
-    setGameBoard(() => [...initialBoard])
     setUser(true)
     setValidMove(true)
-    setPlayersTile({
-      red: {
-        id: -1,
-        x: -1,
-        y: -1,
-      },
-      black: {
-        id: -1,
-        x: -1,
-        y: -1,
-      },
+    // setGameBoard(() => {
+    //   return [...initialBoard]
+    // })
+    setGameBoard(deepCopy(initialBoard))
+    setPlayersTile((prev) => {
+      return {
+        ...prev,
+        red: {
+          id: -1,
+          x: -1,
+          y: -1,
+        },
+        black: {
+          id: -1,
+          x: -1,
+          y: -1,
+        },
+      }
     })
-    setLastMove({ x: -1, y: -1, id: -1 })
+    setLastMove((prev) => {
+      return { ...prev, x: -1, y: -1, id: -1 }
+    })
+    setGame((prev) => {
+      return {
+        ...prev,
+        gameStatus: "Ready to start",
+        // gameOver: false,
+        redPoints: 0,
+        blackPoints: 0,
+        winner: "",
+      }
+    })
+
+    console.log("board after reset", gameBoard[2], initialBoard[2])
   }
   const checkValidMovesLeft = (
     id: number,
@@ -95,21 +117,16 @@ export const Board = ({ initialBoard }: BoardProps) => {
             gameBoard[i].id != id &&
             lastMove.id != gameBoard[i].id)
         ) {
-          // console.log(
-          //   board[i].tileArr[z].x,
-          //   positionX,
-          //   board[i].tileArr[z].owner,
-          //   board[i].tileArr[z].y,
-          //   positionY,
-          //   board[i].tileArr[z].owner
-          // )
           return true
         }
       }
     }
 
+    // setGame((prevData) => {
+    //   return { ...prevData, gameOver: true }
+    // })
     setGame((prevData) => {
-      return { ...prevData, gameOver: true }
+      return { ...prevData, gameStatus: "Over" }
     })
     return false
   }
@@ -143,10 +160,10 @@ export const Board = ({ initialBoard }: BoardProps) => {
         blackPoints: totalBlackPoints,
         winner:
           totalRedPoints > totalBlackPoints
-            ? "red"
+            ? "Player 1"
             : totalBlackPoints > totalRedPoints
-            ? "black"
-            : "draw",
+            ? "Player 2"
+            : "Draw",
       }
     })
   }
@@ -165,7 +182,12 @@ export const Board = ({ initialBoard }: BoardProps) => {
       position.x,
       position.y
     )
-
+    // if (game.gameOver) {
+    //   return
+    // }
+    if (game.gameStatus == "Over") {
+      return
+    }
     const userColor = user == true ? "red" : "black"
 
     if (
@@ -189,26 +211,27 @@ export const Board = ({ initialBoard }: BoardProps) => {
           },
         }
       })
+      setGame((prevData) => {
+        return { ...prevData, gameStatus: "On" }
+      })
       setUser(!user)
       //get a copy of the tile
       const newTileArr = gameBoard[id - 1].tileArr
       newTileArr[index].owner = userColor
-      setGameBoard((prevData) => {
-        const tempArr = prevData
-        tempArr[id - 1].tileArr = newTileArr
-        return tempArr
+
+      setGameBoard((prevData: boardType) => {
+        return prevData.map((tile, index) => {
+          if (index === id - 1) {
+            return { ...tile, tileArr: [...newTileArr] }
+          }
+          return tile
+        })
       })
 
-      // setGameBoard((prevData) => {
-      //   return prevData.map((tile, index) => {
-      //     if (index === id - 1) {
-      //       return { ...tile, tileArr: [...newTileArr] }
-      //     }
-      //     return tile
-      //   })
-      // })
+      // console.log("new game board: ", newGameBoard[2].tileArr)
+      // console.log("Click handler gameboard: ", gameBoard[2].tileArr)
+      // console.log("initial board: ", initialBoard[2].tileArr)
 
-      console.log("initial board: ", initialBoard[0].tileArr)
       if (
         checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
       ) {
@@ -235,25 +258,14 @@ export const Board = ({ initialBoard }: BoardProps) => {
           }}
         />
       )}
-      <div>
-        <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
-          Restart
-        </div>
-        <div> User: {user == true ? "Red" : "Black"}</div>
-        {game.gameOver && (
-          <div>
-            <div> Game Over</div>
-            <div> Winner: {game.winner}</div>
-            <div>
-              {" "}
-              Red: {game.redPoints} , Black: {game.blackPoints}
-            </div>
-          </div>
-        )}
-      </div>
+      <GameControlPanel gameRestart={gameRestart} game={game} user={user} />
 
-      <div {...stylex.props(styles.board(game.gameOver))}>
-        {gameBoard.map((tile) => (
+      <div
+        {...stylex.props(
+          styles.board(game.gameStatus === "Over" ? true : false)
+        )}
+      >
+        {gameBoard.map((tile: tileType) => (
           <Tile
             key={tile.id}
             rows={tile.rows}
@@ -280,14 +292,4 @@ const styles = stylex.create({
     height: "100%",
     boxSizing: "border-box",
   }),
-  restartButton: {
-    cursor: "pointer",
-    border: "1px solid black",
-    padding: "1rem",
-    backgroundColor: {
-      default: "white",
-      ":hover": "lightgray",
-    },
-    width: "max-content",
-  },
 })
