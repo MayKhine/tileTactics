@@ -35,9 +35,14 @@ export const calculateXY = (
 
 export const Board = ({ board }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
-  const [gameBoard, setGameBoard] = useState(board)
+  const [gameBoard, setGameBoard] = useState([...board])
   const [validMove, setValidMove] = useState(true)
-  const [gameOver, setGameOver] = useState(false)
+  const [game, setGame] = useState({
+    gameOver: false,
+    redPoints: 0,
+    blackPoints: 0,
+    winner: "",
+  })
   const [playersTiles, setPlayersTile] = useState({
     red: {
       id: -1,
@@ -53,16 +58,11 @@ export const Board = ({ board }: BoardProps) => {
 
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
-  // works for it works one click late
-  let validMoves = 0
-  const validMovesHandler = () => {
-    // console.log("valid move handler ")
-    // if (!validMovesLeft) {
-    //   setValidMovesLeft(true)
-    // }
-    validMoves = validMoves + 1
+  const gameRestart = () => {
+    console.log("game restart: ", gameBoard, board)
+    setGameBoard(() => [...board])
+    console.log("after: ", gameBoard)
   }
-
   const checkValidMovesLeft = (
     id: number,
     positionX: number,
@@ -80,22 +80,60 @@ export const Board = ({ board }: BoardProps) => {
             board[i].id != id &&
             lastMove.id != board[i].id)
         ) {
-          console.log(
-            board[i].tileArr[z].x,
-            positionX,
-            board[i].tileArr[z].owner,
-            board[i].tileArr[z].y,
-            positionY,
-            board[i].tileArr[z].owner
-          )
+          // console.log(
+          //   board[i].tileArr[z].x,
+          //   positionX,
+          //   board[i].tileArr[z].owner,
+          //   board[i].tileArr[z].y,
+          //   positionY,
+          //   board[i].tileArr[z].owner
+          // )
           return true
         }
       }
     }
-    setGameOver(() => {
-      return true
+
+    setGame((prevData) => {
+      return { ...prevData, gameOver: true }
     })
     return false
+  }
+
+  const calculatePlayersPoint = (board: boardType) => {
+    let totalRedPoints = 0
+    let totalBlackPoints = 0
+    for (let i = 0; i < board.length; i++) {
+      let tempRedPoints = 0
+      let tempBlackPoints = 0
+      for (let x = 0; x < board[i].tileArr.length; x++) {
+        if (board[i].tileArr[x].owner == "red") {
+          tempRedPoints = tempRedPoints + 1
+        }
+        if (board[i].tileArr[x].owner == "black") {
+          tempBlackPoints = tempBlackPoints + 1
+        }
+      }
+      if (tempBlackPoints > tempRedPoints) {
+        totalBlackPoints = totalBlackPoints + board[i].tileArr.length
+      }
+      if (tempRedPoints > tempBlackPoints) {
+        totalRedPoints = totalRedPoints + board[i].tileArr.length
+      }
+    }
+    // return { red: totalRedPoints, black: totalBlackPoints }
+    setGame((prevData) => {
+      return {
+        ...prevData,
+        redPoints: totalRedPoints,
+        blackPoints: totalBlackPoints,
+        winner:
+          totalRedPoints > totalBlackPoints
+            ? "red"
+            : totalBlackPoints > totalRedPoints
+            ? "black"
+            : "draw",
+      }
+    })
   }
 
   const clickHandler = (
@@ -152,6 +190,8 @@ export const Board = ({ board }: BoardProps) => {
           return { ...selectedCellPosition, id: id }
         })
         return
+      } else {
+        calculatePlayersPoint(board)
       }
     } else {
       setValidMove(false)
@@ -169,9 +209,25 @@ export const Board = ({ board }: BoardProps) => {
           }}
         />
       )}
-      <div> User: {user == true ? "Red" : "Black"}</div>
-      {gameOver && <div> GAME OVER</div>}
-      <div {...stylex.props(styles.board(gameOver))}>
+      <div>
+        <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
+          {" "}
+          Restart
+        </div>
+        <div> User: {user == true ? "Red" : "Black"}</div>
+        {game.gameOver && (
+          <div>
+            <div> Game Over</div>
+            <div> Winner: {game.winner}</div>
+            <div>
+              {" "}
+              Red: {game.redPoints} , Black: {game.blackPoints}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div {...stylex.props(styles.board(game.gameOver))}>
         {gameBoard.map((tile) => (
           <Tile
             key={tile.id}
@@ -185,7 +241,6 @@ export const Board = ({ board }: BoardProps) => {
             lastMove={lastMove}
             playersTile={playersTiles}
             gameBoard={gameBoard}
-            validMovesHandler={validMovesHandler}
           />
         ))}
       </div>
@@ -200,4 +255,14 @@ const styles = stylex.create({
     height: "100%",
     boxSizing: "border-box",
   }),
+  restartButton: {
+    cursor: "pointer",
+    border: "1px solid black",
+    padding: "1rem",
+    backgroundColor: {
+      default: "white",
+      ":hover": "lightgray",
+    },
+    width: "max-content",
+  },
 })
