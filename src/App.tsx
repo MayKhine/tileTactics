@@ -515,7 +515,7 @@ export const App = () => {
 
 const styles = stylex.create({
   base: {
-    backgroundColor: "red",
+    // backgroundColor: "red",
     height: "100%",
     width: "100%",
   },

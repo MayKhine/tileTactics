@@ -374,13 +374,13 @@ const styles = stylex.create({
   base: {
     width: "100%",
     height: "100%",
-    backgroundColor: "lightyellow",
+    // backgroundColor: "lightyellow",
     display: "flex",
     flexDirection: "column",
   },
   gameControlPanelContainer: {
     width: "100%",
-    backgroundColor: "orange",
+    // backgroundColor: "orange",
   },
 
   boardContainer: {
@@ -388,12 +388,12 @@ const styles = stylex.create({
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    backgroundColor: "green",
+    // backgroundColor: "green",
   },
 
   board: (gameOver: boolean) => ({
     pointerEvents: gameOver == true ? "none" : "all",
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
 
     width: {
       default: `${Math.round((parseInt(tokens.bigCellSize) * 10) / 16)}rem`,
@@ -419,7 +419,7 @@ const styles = stylex.create({
   title: {
     fontSize: "2rem",
     width: "100%",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     textAlign: "center",
     fontWeight: "400",
     fontStyle: "normal",

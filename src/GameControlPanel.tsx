@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 import { playerMarblesType } from "./Board"
+import { projectStyles } from "./tokens.stylex"
 
 type GameControlPanelProps = {
   gameRestart: () => void
@@ -23,34 +24,39 @@ export const GameControlPanel = ({
 }: GameControlPanelProps) => {
   const [isChecked, setIsChecked] = useState(false)
   return (
-    <div {...stylex.props(styles.base)}>
+    <div {...stylex.props(styles.base, projectStyles.padding)}>
       <div {...stylex.props(styles.controlPanel)}>
-        <div {...stylex.props(styles.restartButtonContainer)}>
-          <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
-            Restart
+        <div {...stylex.props(styles.options)}>
+          {" "}
+          <div {...stylex.props(styles.spaceBetweenContainer)}>
+            <div {...stylex.props(styles.restartButtonContainer)}>
+              <div
+                {...stylex.props(styles.restartButton)}
+                onClick={gameRestart}
+              >
+                Restart
+              </div>
+            </div>
+            <div {...stylex.props(styles.checkedBoxContainer)}>
+              <div
+                {...stylex.props(styles.checkedBox)}
+                onClick={() => {
+                  if (!isChecked) {
+                    showPossilbeMovesHandler(true)
+                    setIsChecked(true)
+                  } else {
+                    showPossilbeMovesHandler(false)
+                    setIsChecked(false)
+                  }
+                }}
+              >
+                {isChecked && <div {...stylex.props(styles.checkedMark)} />}
+              </div>
+              <span>Show Possible Moves </span>
+            </div>
           </div>
         </div>
-        <div {...stylex.props(styles.spaceBetweenContainer)}>
-          <div
-            {...stylex.props(styles.checkedBox)}
-            onClick={() => {
-              if (!isChecked) {
-                showPossilbeMovesHandler(true)
-                setIsChecked(true)
-              } else {
-                showPossilbeMovesHandler(false)
-                setIsChecked(false)
-              }
-            }}
-          >
-            {isChecked && <div {...stylex.props(styles.checkedMark)} />}
-          </div>
-          <span>Show Possible Moves </span>
-        </div>
-        <div {...stylex.props(styles.spaceBetweenContainer)}>
-          <div>Game Status: </div>
-          <div>{game.gameStatus}</div>
-        </div>
+
         {game.gameStatus != "Over" && (
           <div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
@@ -91,18 +97,22 @@ const styles = stylex.create({
     minHeight: "7.5rem",
     display: "flex",
     justifyContent: "center",
-    fontSize: ".8rem",
-    paddingBottom: "1rem",
   },
   controlPanel: {
-    // backgroundColor: "gray",
-    minWidth: "12rem",
+    minWidth: "20rem",
+    // backgroundColor: "pink",
+  },
+  options: {
+    marginBottom: "1rem",
   },
   restartButtonContainer: {
-    width: "100%",
+    // width: "100%",
     display: "flex",
     justifyContent: "center",
-    marginBottom: ".5rem",
+    // marginBottom: ".5rem",
+    // backgroundColor: "red",
+    // height: "2.5rem",
+    // width: "200%",
   },
   restartButton: {
     cursor: "pointer",
@@ -115,7 +125,14 @@ const styles = stylex.create({
     },
     width: "max-content",
   },
-
+  checkedBoxContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: ".3rem",
+    // height: "100%",
+    // backgroundColor: "green",
+  },
   checkedBox: {
     cursor: "pointer",
     height: "1rem",
@@ -125,6 +142,7 @@ const styles = stylex.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: ".2rem",
+    border: "2px solid black",
   },
   checkedMark: {
     width: "60%",
@@ -134,10 +152,13 @@ const styles = stylex.create({
   },
   spaceBetweenContainer: {
     width: "100%",
+    // height: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
 
     // backgroundColor: "white",
   },
