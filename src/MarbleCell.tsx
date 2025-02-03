@@ -119,7 +119,6 @@ export const MarbleCell = ({
           <div
             {...stylex.props(styles.circle(tileColor))}
             onClick={() => {
-              console.log("Marbel cell on click: ", tileColor)
               clickHandler(id, index, rows, cols, position)
             }}
           />

@@ -133,6 +133,18 @@ export const Board = ({
             gameBoard[i].id != id &&
             lastMove.id != gameBoard[i].id)
         ) {
+          console.log(
+            "still valid",
+            positionX,
+            positionY,
+            gameBoard[i].tileArr[z].x,
+            gameBoard[i].tileArr[z].y,
+            gameBoard[i],
+            "gameboardID:",
+            gameBoard[i].id,
+            "thisid: ",
+            id
+          )
           setValidMove(true)
           return true
         }
@@ -144,6 +156,7 @@ export const Board = ({
   }
 
   const gameEndHandler = () => {
+    console.log("game end")
     setGame((prevData) => {
       return { ...prevData, gameStatus: "Over" }
     })
@@ -234,14 +247,6 @@ export const Board = ({
         }
       })
 
-      setLastMove(() => {
-        return { ...selectedCellPosition, id: id }
-      })
-
-      // setGame((prevData) => {
-      //   return { ...prevData, gameStatus: "On" }
-      // })
-
       setUser(!user)
       const newTileArr = gameBoard[id - 1].tileArr
       newTileArr[index].owner = userColor
@@ -270,18 +275,18 @@ export const Board = ({
           return { ...prevData, player2: marbles }
         }
       })
-      checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
+      // checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
 
-      console.log("click handler end : ", gameBoard[1], lastMove, playersTiles)
+      // console.log("click handler end : ", gameBoard[1], lastMove, playersTiles)
 
-      // if (
-      //   checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
-      // ) {
-      //   setLastMove(() => {
-      //     return { ...selectedCellPosition, id: id }
-      //   })
-      //   return
-      // }
+      if (
+        checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
+      ) {
+        setLastMove(() => {
+          return { ...selectedCellPosition, id: id }
+        })
+        return
+      }
     } else {
       setValidMove(false)
       setTimeout(() => setValidMove(true), 5000)
