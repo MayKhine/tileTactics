@@ -39,6 +39,7 @@ export const Board = ({ initialBoard }: BoardProps) => {
   const deepCopy = (data: boardType) => JSON.parse(JSON.stringify(data))
   const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
   const [validMove, setValidMove] = useState(true)
+  const [showPossibleMoves, setShowPossibleMoves] = useState(false)
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
     // gameOver: false,
@@ -64,9 +65,6 @@ export const Board = ({ initialBoard }: BoardProps) => {
   const gameRestart = () => {
     setUser(true)
     setValidMove(true)
-    // setGameBoard(() => {
-    //   return [...initialBoard]
-    // })
     setGameBoard(deepCopy(initialBoard))
     setPlayersTile((prev) => {
       return {
@@ -267,9 +265,16 @@ export const Board = ({ initialBoard }: BoardProps) => {
           text="Game Over"
         />
       )}
-      <div {...stylex.props(styles.title)}>Kulami</div>
+      <div {...stylex.props(styles.title)}>Title Tactics</div>
       <div {...stylex.props(styles.gameControlPanelContainer)}>
-        <GameControlPanel gameRestart={gameRestart} game={game} user={user} />
+        <GameControlPanel
+          gameRestart={gameRestart}
+          game={game}
+          user={user}
+          showPossilbeMovesHandler={(value: boolean) => {
+            setShowPossibleMoves(value)
+          }}
+        />
       </div>
       <div {...stylex.props(styles.boardContainer)}>
         <div
@@ -290,6 +295,7 @@ export const Board = ({ initialBoard }: BoardProps) => {
               lastMove={lastMove}
               playersTile={playersTiles}
               gameBoard={gameBoard}
+              showPossilbeMoves={showPossibleMoves}
             />
           ))}
         </div>
@@ -329,14 +335,13 @@ const styles = stylex.create({
     backgroundColor: "white",
   }),
   title: {
-    fontSize: "4rem",
+    fontSize: "2rem",
     width: "100%",
     backgroundColor: "white",
     textAlign: "center",
-    fontFamily: "Long Cang",
-    fontWeight: "500",
+    fontWeight: "400",
     fontStyle: "normal",
-    marginBottom: ".5rem",
-    lineHeight: "4rem",
+    paddingTop: "1.5rem",
+    paddingBottom: "1.5rem",
   },
 })

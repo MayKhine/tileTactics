@@ -1,21 +1,24 @@
 import * as stylex from "@stylexjs/stylex"
+import { useState } from "react"
 
 type GameControlPanelProps = {
   gameRestart: () => void
   game: {
     gameStatus: string
-    // gameOver: boolean
     redPoints: number
     blackPoints: number
     winner: string
   }
   user: boolean
+  showPossilbeMovesHandler: (value: boolean) => void
 }
 export const GameControlPanel = ({
   gameRestart,
   game,
   user,
+  showPossilbeMovesHandler,
 }: GameControlPanelProps) => {
+  const [isChecked, setIsChecked] = useState(false)
   return (
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
@@ -23,6 +26,23 @@ export const GameControlPanel = ({
           <div {...stylex.props(styles.restartButton)} onClick={gameRestart}>
             Restart
           </div>
+        </div>
+        <div {...stylex.props(styles.spaceBetweenContainer)}>
+          <div
+            {...stylex.props(styles.checkedBox)}
+            onClick={() => {
+              if (!isChecked) {
+                showPossilbeMovesHandler(true)
+                setIsChecked(true)
+              } else {
+                showPossilbeMovesHandler(false)
+                setIsChecked(false)
+              }
+            }}
+          >
+            {isChecked && <div {...stylex.props(styles.checkedMark)} />}
+          </div>
+          <span>Show Possible Moves </span>
         </div>
         <div {...stylex.props(styles.spaceBetweenContainer)}>
           <div>Game Status: </div>
@@ -83,12 +103,31 @@ const styles = stylex.create({
     },
     width: "max-content",
   },
+
+  checkedBox: {
+    cursor: "pointer",
+    height: "1rem",
+    width: "1rem",
+    backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: ".2rem",
+  },
+  checkedMark: {
+    width: "60%",
+    aspectRatio: "1",
+    backgroundColor: "black",
+    borderRadius: "50%",
+  },
   spaceBetweenContainer: {
     width: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "white",
+    alignItems: "center",
+
+    // backgroundColor: "white",
   },
   playerPoints: {
     // backgroundColor: "white",

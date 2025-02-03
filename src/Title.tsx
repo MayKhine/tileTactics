@@ -28,6 +28,7 @@ type TileProps = {
     black: { id: number; x: number; y: number }
   }
   gameBoard: boardType
+  showPossilbeMoves: boolean
 }
 
 export type positionType = {
@@ -45,6 +46,7 @@ export const Tile = ({
   lastMove,
   playersTile,
   gameBoard,
+  showPossilbeMoves,
 }: TileProps) => {
   return (
     <div {...stylex.props(styles.tile(rows, cols, position))}>
@@ -62,6 +64,7 @@ export const Tile = ({
           lastMove={lastMove}
           playersTile={playersTile}
           gameBoard={gameBoard}
+          showPossibleMoves={showPossilbeMoves}
         />
       ))}
     </div>
