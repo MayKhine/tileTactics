@@ -33,13 +33,20 @@ export const calculateXY = (
 
   return { x, y }
 }
-
+export type playerMarblesType = {
+  player1: number
+  player2: number
+}
 export const Board = ({ initialBoard }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const deepCopy = (data: boardType) => JSON.parse(JSON.stringify(data))
   const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
   const [validMove, setValidMove] = useState(true)
   const [showPossibleMoves, setShowPossibleMoves] = useState(false)
+  const [playerMarbles, setPlayerMarbles] = useState({
+    player1: 3,
+    player2: 3,
+  })
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
     // gameOver: false,
@@ -119,17 +126,23 @@ export const Board = ({ initialBoard }: BoardProps) => {
       }
     }
 
+    gameEndHandler()
     // setGame((prevData) => {
-    //   return { ...prevData, gameOver: true }
+    //   return { ...prevData, gameStatus: "Over" }
     // })
+    // setValidMove(false)
+    // setTimeout(() => setValidMove(true), 5000)
+    return
+  }
+
+  const gameEndHandler = () => {
     setGame((prevData) => {
       return { ...prevData, gameStatus: "Over" }
     })
     setValidMove(false)
     setTimeout(() => setValidMove(true), 5000)
-    return
+    calculatePlayersPoint()
   }
-
   const calculatePlayersPoint = () => {
     let totalRedPoints = 0
     let totalBlackPoints = 0
@@ -151,7 +164,6 @@ export const Board = ({ initialBoard }: BoardProps) => {
         totalRedPoints = totalRedPoints + gameBoard[i].tileArr.length
       }
     }
-    // return { red: totalRedPoints, black: totalBlackPoints }
     setGame((prevData) => {
       return {
         ...prevData,
@@ -229,6 +241,22 @@ export const Board = ({ initialBoard }: BoardProps) => {
         })
       })
 
+      setPlayerMarbles((prevData: playerMarblesType) => {
+        if (userColor == "red") {
+          const marbles = prevData.player1 - 1
+
+          return { ...prevData, player1: marbles }
+        }
+        if (userColor == "black") {
+          const marbles = prevData.player2 - 1
+          if (marbles == 0 && prevData.player1 == 0) {
+            console.log("game over")
+            gameEndHandler()
+          }
+          return { ...prevData, player2: marbles }
+        }
+      })
+
       if (
         checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
       ) {
@@ -236,9 +264,10 @@ export const Board = ({ initialBoard }: BoardProps) => {
           return { ...selectedCellPosition, id: id }
         })
         return
-      } else {
-        calculatePlayersPoint()
       }
+      // else {
+      //   calculatePlayersPoint()
+      // }
     } else {
       setValidMove(false)
       setTimeout(() => setValidMove(true), 5000)
@@ -274,6 +303,7 @@ export const Board = ({ initialBoard }: BoardProps) => {
           showPossilbeMovesHandler={(value: boolean) => {
             setShowPossibleMoves(value)
           }}
+          playerMarbles={playerMarbles}
         />
       </div>
       <div {...stylex.props(styles.boardContainer)}>

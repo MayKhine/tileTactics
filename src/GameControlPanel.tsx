@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
+import { playerMarblesType } from "./Board"
 
 type GameControlPanelProps = {
   gameRestart: () => void
@@ -11,12 +12,14 @@ type GameControlPanelProps = {
   }
   user: boolean
   showPossilbeMovesHandler: (value: boolean) => void
+  playerMarbles: playerMarblesType
 }
 export const GameControlPanel = ({
   gameRestart,
   game,
   user,
   showPossilbeMovesHandler,
+  playerMarbles,
 }: GameControlPanelProps) => {
   const [isChecked, setIsChecked] = useState(false)
   return (
@@ -49,9 +52,19 @@ export const GameControlPanel = ({
           <div>{game.gameStatus}</div>
         </div>
         {game.gameStatus != "Over" && (
-          <div {...stylex.props(styles.spaceBetweenContainer)}>
-            <div> Player Turn: </div>
-            <div>{user == true ? "Player 1" : "Player 2"} </div>
+          <div>
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
+              <div> Player Turn: </div>
+              <div>{user == true ? "Player 1" : "Player 2"} </div>
+            </div>
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
+              <div> Player 1 marbles: </div>
+              <div> {playerMarbles.player1} </div>
+            </div>
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
+              <div> Player 2 marbles: </div>
+              <div> {playerMarbles.player2} </div>
+            </div>
           </div>
         )}
 
