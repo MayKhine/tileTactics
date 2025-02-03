@@ -71,15 +71,13 @@ export const GameControlPanel = ({
         {game.gameStatus == "Over" && (
           <div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
-              <div> Winner: </div> <div> {game.winner} </div>{" "}
+              <div> Winner: </div> <div> {game.winner} </div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
-              <div {...stylex.props(styles.playerPoints)}>
-                Player 1: {game.redPoints}
-              </div>
-              <div {...stylex.props(styles.playerPoints)}>
-                Player 2: {game.blackPoints}
-              </div>
+              <div> Player 1: </div> <div> {game.redPoints} points</div>
+            </div>
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
+              <div> Player 2: </div> <div> {game.blackPoints} points</div>
             </div>
           </div>
         )}

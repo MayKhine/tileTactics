@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { boardType, tileType } from "./App"
-import { positionType, Tile } from "./Title"
+import { positionType, Tile } from "./Tile"
 import * as stylex from "@stylexjs/stylex"
 import { GameControlPanel } from "./GameControlPanel"
 import { Alert } from "./Alert"
-
+import { tokens } from "./tokens.stylex"
 type BoardProps = {
   initialBoard: boardType
+  positionMultiplierBasedOnWindowSize: number
 }
 
 export const calculateXY = (
@@ -14,7 +15,8 @@ export const calculateXY = (
   rows: number,
   cols: number,
   x: number,
-  y: number
+  y: number,
+  positionMultiplierBasedOnWindowSize: number
 ) => {
   let tempCol = 0
   let tempX = x
@@ -23,12 +25,15 @@ export const calculateXY = (
   for (let curRow = 0; curRow < rows; curRow++) {
     for (let curCol = 0; curCol < cols; curCol++) {
       if (index === curCol + tempCol) {
-        tempX = tempX + curCol * 50
+        // tempX = tempX + curCol * 50
+        tempX = tempX + curCol * positionMultiplierBasedOnWindowSize
+
         return { x: tempX, y: tempY }
       }
     }
     tempCol = tempCol + cols
-    tempY = tempY + 50
+    // tempY = tempY + 50
+    tempY = tempY + positionMultiplierBasedOnWindowSize
   }
 
   return { x, y }
@@ -37,15 +42,19 @@ export type playerMarblesType = {
   player1: number
   player2: number
 }
-export const Board = ({ initialBoard }: BoardProps) => {
+
+export const Board = ({
+  initialBoard,
+  positionMultiplierBasedOnWindowSize,
+}: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
   const deepCopy = (data: boardType) => JSON.parse(JSON.stringify(data))
   const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
   const [validMove, setValidMove] = useState(true)
   const [showPossibleMoves, setShowPossibleMoves] = useState(false)
   const [playerMarbles, setPlayerMarbles] = useState({
-    player1: 3,
-    player2: 3,
+    player1: 28,
+    player2: 28,
   })
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
@@ -100,6 +109,10 @@ export const Board = ({ initialBoard }: BoardProps) => {
         winner: "",
       }
     })
+    setPlayerMarbles({
+      player1: 28,
+      player2: 28,
+    })
 
     console.log("board after reset", gameBoard[2], initialBoard[2])
   }
@@ -127,11 +140,6 @@ export const Board = ({ initialBoard }: BoardProps) => {
     }
 
     gameEndHandler()
-    // setGame((prevData) => {
-    //   return { ...prevData, gameStatus: "Over" }
-    // })
-    // setValidMove(false)
-    // setTimeout(() => setValidMove(true), 5000)
     return
   }
 
@@ -191,16 +199,16 @@ export const Board = ({ initialBoard }: BoardProps) => {
       rows,
       cols,
       position.x,
-      position.y
+      position.y,
+      positionMultiplierBasedOnWindowSize
     )
-    // if (game.gameOver) {
-    //   return
-    // }
+
     if (game.gameStatus == "Over") {
       return
     }
     const userColor = user == true ? "red" : "black"
 
+    console.log("userColor: ", userColor)
     if (
       playersTiles.black.id !== id &&
       playersTiles.red.id !== id &&
@@ -265,15 +273,31 @@ export const Board = ({ initialBoard }: BoardProps) => {
         })
         return
       }
-      // else {
-      //   calculatePlayersPoint()
-      // }
     } else {
       setValidMove(false)
       setTimeout(() => setValidMove(true), 5000)
       return
     }
   }
+
+  useEffect(() => {
+    const updatedBoard = gameBoard.map((tile: tileType) => {
+      return {
+        ...tile,
+        position: {
+          x: tile.originalPosition.x * positionMultiplierBasedOnWindowSize,
+          y: tile.originalPosition.y * positionMultiplierBasedOnWindowSize,
+        },
+      }
+    })
+    setGameBoard(updatedBoard)
+  }, [positionMultiplierBasedOnWindowSize])
+
+  // console.log(
+  //   "gmae board",
+  //   gameBoard[0].originalPosition,
+  //   gameBoard[0].position
+  // )
 
   return (
     <div {...stylex.props(styles.base)}>
@@ -326,6 +350,9 @@ export const Board = ({ initialBoard }: BoardProps) => {
               playersTile={playersTiles}
               gameBoard={gameBoard}
               showPossilbeMoves={showPossibleMoves}
+              positionMultiplierBasedOnWindowSize={
+                positionMultiplierBasedOnWindowSize
+              }
             />
           ))}
         </div>
@@ -349,20 +376,36 @@ const styles = stylex.create({
 
   boardContainer: {
     width: "100%",
+    height: "100%",
     display: "flex",
     justifyContent: "center",
-    backgroundColor: "pink",
-    height: "100%",
+    backgroundColor: "green",
   },
 
   board: (gameOver: boolean) => ({
-    // border: "2px solid black",
     pointerEvents: gameOver == true ? "none" : "all",
+    backgroundColor: "pink",
+
+    width: {
+      default: `${Math.round((parseInt(tokens.bigCellSize) * 10) / 16)}rem`,
+      "@media (max-width: 430px)": `${Math.round(
+        (parseInt(tokens.smallCellSize) * 10) / 16
+      )}rem`,
+      "@media (min-width: 431px) and (max-width: 768px)": `${Math.round(
+        (parseInt(tokens.medCellSize) * 10) / 16
+      )}rem`,
+    },
+    height: {
+      default: `${Math.round((parseInt(tokens.bigCellSize) * 10) / 16)}rem`,
+      "@media (max-width: 430px)": `${Math.round(
+        (parseInt(tokens.smallCellSize) * 10) / 16
+      )}rem`,
+      "@media (min-width: 431px) and (max-width: 768px)": `${Math.round(
+        (parseInt(tokens.medCellSize) * 10) / 16
+      )}rem`,
+    },
     position: "relative",
     boxSizing: "border-box",
-    width: "31.5rem",
-    height: "31.5rem",
-    backgroundColor: "white",
   }),
   title: {
     fontSize: "2rem",
