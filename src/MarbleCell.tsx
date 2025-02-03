@@ -119,7 +119,7 @@ export const MarbleCell = ({
           <div
             {...stylex.props(styles.circle(tileColor))}
             onClick={() => {
-              console.log("position: ", tileColor)
+              console.log("Marbel cell on click: ", tileColor)
               clickHandler(id, index, rows, cols, position)
             }}
           />
@@ -155,8 +155,10 @@ const styles = stylex.create({
   circle: (color: string) => ({
     // width: "1.5rem",
     // height: "1.5rem",
-    width: "60%",
-    height: "60%",
+    // width: "100%",
+    // height: "100%",
+    minWidth: "1.5rem",
+    minHeight: "1.5rem",
     borderRadius: "50%",
     backgroundColor:
       color === "black" ? "black" : color === "red" ? "red" : "gray",
@@ -165,6 +167,8 @@ const styles = stylex.create({
   }),
 
   circleRing: {
+    // width: "70%",
+    // height: "70%",
     border: "2px solid yellow",
     borderRadius: "50%",
     backgroundColor: "pink",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { boardType, tileType } from "./App"
 import { positionType, Tile } from "./Tile"
 import * as stylex from "@stylexjs/stylex"
@@ -208,7 +208,12 @@ export const Board = ({
     }
     const userColor = user == true ? "red" : "black"
 
-    console.log("userColor: ", userColor)
+    if (lastMove.x == 1 && lastMove.y == 1) {
+      setGame((prevData) => {
+        return { ...prevData, gameStatus: "On" }
+      })
+    }
+
     if (
       playersTiles.black.id !== id &&
       playersTiles.red.id !== id &&
@@ -219,8 +224,6 @@ export const Board = ({
       gameBoard[id - 1].tileArr[index].owner.length === 0
     ) {
       setPlayersTile((prevData) => {
-        // setValidMove(true)
-        // return { ...prevData, [userColor]: id }
         return {
           ...prevData,
           [userColor]: {
@@ -231,12 +234,15 @@ export const Board = ({
         }
       })
 
-      setGame((prevData) => {
-        return { ...prevData, gameStatus: "On" }
+      setLastMove(() => {
+        return { ...selectedCellPosition, id: id }
       })
 
+      // setGame((prevData) => {
+      //   return { ...prevData, gameStatus: "On" }
+      // })
+
       setUser(!user)
-      //get a copy of the tile
       const newTileArr = gameBoard[id - 1].tileArr
       newTileArr[index].owner = userColor
 
@@ -264,15 +270,18 @@ export const Board = ({
           return { ...prevData, player2: marbles }
         }
       })
+      checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
 
-      if (
-        checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
-      ) {
-        setLastMove(() => {
-          return { ...selectedCellPosition, id: id }
-        })
-        return
-      }
+      console.log("click handler end : ", gameBoard[1], lastMove, playersTiles)
+
+      // if (
+      //   checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
+      // ) {
+      //   setLastMove(() => {
+      //     return { ...selectedCellPosition, id: id }
+      //   })
+      //   return
+      // }
     } else {
       setValidMove(false)
       setTimeout(() => setValidMove(true), 5000)
@@ -280,18 +289,18 @@ export const Board = ({
     }
   }
 
-  useEffect(() => {
-    const updatedBoard = gameBoard.map((tile: tileType) => {
-      return {
-        ...tile,
-        position: {
-          x: tile.originalPosition.x * positionMultiplierBasedOnWindowSize,
-          y: tile.originalPosition.y * positionMultiplierBasedOnWindowSize,
-        },
-      }
-    })
-    setGameBoard(updatedBoard)
-  }, [positionMultiplierBasedOnWindowSize])
+  // useEffect(() => {
+  //   const updatedBoard = gameBoard.map((tile: tileType) => {
+  //     return {
+  //       ...tile,
+  //       position: {
+  //         x: tile.originalPosition.x * positionMultiplierBasedOnWindowSize,
+  //         y: tile.originalPosition.y * positionMultiplierBasedOnWindowSize,
+  //       },
+  //     }
+  //   })
+  //   setGameBoard(updatedBoard)
+  // }, [positionMultiplierBasedOnWindowSize])
 
   // console.log(
   //   "gmae board",
