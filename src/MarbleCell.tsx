@@ -148,16 +148,20 @@ const styles = stylex.create({
     width: "80%",
     aspectRatio: "1",
     borderCollapse: "collapse",
-    backgroundColor: highlightValidMove === true ? "lightGreen" : "lightgray",
+    backgroundColor: highlightValidMove === true ? "lightGreen" : "white",
   }),
 
   circle: (color: string) => ({
-    // width: "1.5rem",
-    // height: "1.5rem",
-    // width: "100%",
-    // height: "100%",
-    minWidth: "1.5rem",
-    minHeight: "1.5rem",
+    width: {
+      default: "2rem",
+      "@media (max-width: 430px)": "1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1.5rem",
+    },
+    height: {
+      default: "2rem",
+      "@media (max-width: 430px)": "1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1.5rem",
+    },
     borderRadius: "50%",
     backgroundColor:
       color === "black" ? "black" : color === "red" ? "red" : "gray",

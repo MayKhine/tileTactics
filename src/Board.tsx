@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { boardType, tileType } from "./App"
 import { positionType, Tile } from "./Tile"
 import * as stylex from "@stylexjs/stylex"
@@ -294,24 +294,19 @@ export const Board = ({
     }
   }
 
-  // useEffect(() => {
-  //   const updatedBoard = gameBoard.map((tile: tileType) => {
-  //     return {
-  //       ...tile,
-  //       position: {
-  //         x: tile.originalPosition.x * positionMultiplierBasedOnWindowSize,
-  //         y: tile.originalPosition.y * positionMultiplierBasedOnWindowSize,
-  //       },
-  //     }
-  //   })
-  //   setGameBoard(updatedBoard)
-  // }, [positionMultiplierBasedOnWindowSize])
-
-  // console.log(
-  //   "gmae board",
-  //   gameBoard[0].originalPosition,
-  //   gameBoard[0].position
-  // )
+  useEffect(() => {
+    const updatedBoard = gameBoard.map((tile: tileType) => {
+      return {
+        ...tile,
+        position: {
+          x: tile.originalPosition.x * positionMultiplierBasedOnWindowSize,
+          y: tile.originalPosition.y * positionMultiplierBasedOnWindowSize,
+        },
+      }
+    })
+    setGameBoard(updatedBoard)
+    gameRestart()
+  }, [positionMultiplierBasedOnWindowSize])
 
   return (
     <div {...stylex.props(styles.base)}>

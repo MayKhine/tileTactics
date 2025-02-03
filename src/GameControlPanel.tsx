@@ -92,6 +92,7 @@ const styles = stylex.create({
     display: "flex",
     justifyContent: "center",
     fontSize: ".8rem",
+    paddingBottom: "1rem",
   },
   controlPanel: {
     // backgroundColor: "gray",

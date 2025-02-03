@@ -186,6 +186,138 @@ export const App = () => {
 
       tileArr: [],
     },
+    {
+      id: 7,
+      rows: 3,
+      cols: 1,
+      // position: { x: 100, y: 150 },
+      originalPosition: {
+        x: 2,
+        y: 3,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 8,
+      rows: 2,
+      cols: 3,
+      // position: { x: 150, y: 150 },
+      originalPosition: {
+        x: 3,
+        y: 3,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 9,
+      rows: 1,
+      cols: 3,
+      // position: { x: 350, y: 150 },
+      originalPosition: {
+        x: 7,
+        y: 3,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 10,
+      rows: 1,
+      cols: 3,
+      // position: { x: 150, y: 250 },
+      originalPosition: {
+        x: 3,
+        y: 5,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 11,
+      rows: 2,
+      cols: 3,
+      // position: { x: 300, y: 200 },
+      originalPosition: {
+        x: 6,
+        y: 4,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 12,
+      rows: 2,
+      cols: 2,
+      // position: { x: 50, y: 300 },
+      originalPosition: {
+        x: 1,
+        y: 6,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 13,
+      rows: 2,
+      cols: 1,
+      // position: { x: 150, y: 300 },
+      originalPosition: {
+        x: 3,
+        y: 6,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 14,
+      rows: 2,
+      cols: 2,
+      // position: { x: 200, y: 300 },
+      originalPosition: {
+        x: 4,
+        y: 6,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 15,
+      rows: 3,
+      cols: 2,
+      // position: { x: 300, y: 300 },
+      originalPosition: {
+        x: 6,
+        y: 6,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 16,
+      rows: 1,
+      cols: 2,
+      // position: { x: 100, y: 400 },
+      originalPosition: {
+        x: 2,
+        y: 8,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 17,
+      rows: 2,
+      cols: 2,
+      // position: { x: 200, y: 400 },
+      originalPosition: {
+        x: 4,
+        y: 8,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
   ]
 
   // const board = [
