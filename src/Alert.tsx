@@ -31,10 +31,11 @@ const styles = stylex.create({
   },
   textBox: {
     border: "2px solid black",
-    backgroundColor: "lightyellow",
+    backgroundColor: "white",
     padding: "5rem",
     width: "max-content",
     height: "max-content",
+    // boxShadow: "2px 2px black",
   },
   button: {
     border: "2px solid black",

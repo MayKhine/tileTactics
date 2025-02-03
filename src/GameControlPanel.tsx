@@ -30,14 +30,16 @@ export const GameControlPanel = ({
         </div>
         {game.gameStatus != "Over" && (
           <div {...stylex.props(styles.spaceBetweenContainer)}>
-            <div> Player Turn: </div>{" "}
+            <div> Player Turn: </div>
             <div>{user == true ? "Player 1" : "Player 2"} </div>
           </div>
         )}
 
         {game.gameStatus == "Over" && (
           <div>
-            <div> Winner: {game.winner}</div>
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
+              <div> Winner: </div> <div> {game.winner} </div>{" "}
+            </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div {...stylex.props(styles.playerPoints)}>
                 Player 1: {game.redPoints}
