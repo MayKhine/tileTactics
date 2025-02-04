@@ -42,9 +42,9 @@ export const App = () => {
 
   const positionMultiplierBasedOnWindowSize =
     windowSize.width <= 430
-      ? 30
-      : windowSize.width > 430 && windowSize.width <= 768
       ? 40
+      : windowSize.width > 430 && windowSize.width <= 768
+      ? 45
       : 50
 
   console.log(

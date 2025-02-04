@@ -341,6 +341,13 @@ const styles = stylex.create({
     height: "100%",
     display: "flex",
     justifyContent: "center",
+    marginTop: {
+      default: "1.5rem",
+      "@media (max-width: 430px)": ".5rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1rem",
+    },
+    // alignContent: "center",
+    // alignItems: "center",
   },
 
   board: (gameOver: boolean) => ({

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { boardType } from "./App"
 import { positionType } from "./Tile"
-import { colors, projectStyles } from "./tokens.stylex"
+import { colors } from "./tokens.stylex"
 
 type MarbelCellProps = {
   id: number
@@ -90,24 +90,24 @@ export const MarbleCell = ({
     <div key={index} {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.cell(highlightValidMove))}>
         {lastRedMove && (
-          <div {...stylex.props(styles.circleRing)}>
-            <div
-              {...stylex.props(styles.circle(tileColor))}
-              onClick={() => {
-                clickHandler(id, index, rows, cols, position)
-              }}
-            />
+          <div
+            {...stylex.props(styles.circle(tileColor))}
+            onClick={() => {
+              clickHandler(id, index, rows, cols, position)
+            }}
+          >
+            <div {...stylex.props(styles.circleDot)} />
           </div>
         )}
 
         {lastBlackMove && (
-          <div {...stylex.props(styles.circleRing)}>
-            <div
-              {...stylex.props(styles.circle(tileColor))}
-              onClick={() => {
-                clickHandler(id, index, rows, cols, position)
-              }}
-            />
+          <div
+            {...stylex.props(styles.circle(tileColor))}
+            onClick={() => {
+              clickHandler(id, index, rows, cols, position)
+            }}
+          >
+            <div {...stylex.props(styles.circleDot)} />
           </div>
         )}
 
@@ -138,47 +138,49 @@ const styles = stylex.create({
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    borderRadius: "50%",
+    width: "85%",
     aspectRatio: "1",
     borderCollapse: "collapse",
     backgroundColor:
-      highlightValidMove === true ? colors.ashGreen : colors.white,
+      highlightValidMove === true ? "rgba(201, 214, 194, 0.7)" : colors.white,
   }),
 
   circle: (color: string) => ({
     width: {
-      default: "1.8rem",
-      "@media (max-width: 430px)": "1rem",
-      "@media (min-width: 431px) and (max-width: 768px)": "1.3rem",
+      default: "1.7rem",
+      "@media (max-width: 430px)": "1.3rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1.5rem",
     },
     height: {
-      default: "1.8rem",
-      "@media (max-width: 430px)": "1rem",
-      "@media (min-width: 431px) and (max-width: 768px)": "1.3rem",
+      default: "1.7rem",
+      "@media (max-width: 430px)": "1.3rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1.5rem",
     },
     borderRadius: "50%",
     backgroundColor:
-      color === "black" ? colors.blue : color === "red" ? colors.sand : "gray",
+      color === "black"
+        ? colors.blue
+        : color === "red"
+        ? colors.sand
+        : colors.gray,
     cursor: "pointer",
-    boxSizing: "border-box",
-  }),
-
-  circleRing: {
-    borderWidth: {
-      default: "3px",
-      "@media (max-width: 430px)": ".08rem",
-    },
-    borderStyle: "solid",
-    borderColor: colors.darkBlue,
-
-    borderRadius: "50%",
-    backgroundColor: "pink",
     boxSizing: "border-box",
     display: "flex",
     justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    justifyItems: "center",
+  }),
+
+  circleDot: {
+    width: {
+      default: "10px",
+      "@media (max-width: 430px)": "5px",
+    },
+    height: {
+      default: "10px",
+      "@media (max-width: 430px)": "5px",
+    },
+    backgroundColor: "white",
     alignSelf: "center",
+    borderRadius: "50%",
   },
 })

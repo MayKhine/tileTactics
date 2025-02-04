@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { projectStyles } from "./tokens.stylex"
 
 type alertProps = {
   closeAlert: () => void
@@ -6,10 +7,10 @@ type alertProps = {
 }
 export const Alert = ({ closeAlert, text }: alertProps) => {
   return (
-    <div {...stylex.props(styles.base)}>
-      <div {...stylex.props(styles.textBox)}>
+    <div {...stylex.props(styles.base)} onClick={closeAlert}>
+      <div {...stylex.props(styles.textBox, projectStyles.alertBorder)}>
         <div> {text}</div>
-        <div {...stylex.props(styles.button)} onClick={closeAlert}>
+        <div {...stylex.props(projectStyles.button)} onClick={closeAlert}>
           Okay
         </div>
       </div>
@@ -28,21 +29,25 @@ const styles = stylex.create({
     justifyContent: "center",
     alignItems: "center",
     fontSize: ".8rem",
+    backgroundColor: "rgba(57, 113, 150, 0.5)",
   },
   textBox: {
-    border: "2px solid black",
-    backgroundColor: "white",
-    padding: "5rem",
+    backgroundColor: "#FAEFDD",
     width: "max-content",
     height: "max-content",
-    // boxShadow: "2px 2px black",
-  },
-  button: {
-    border: "2px solid black",
-    cursor: "pointer",
-    backgroundColor: {
-      default: "white",
-      ":hover": "lightgray",
+    display: "flex",
+    flexDirection: "column",
+    justifyItems: "center",
+    alignItems: "center",
+    padding: {
+      default: "3rem",
+      "@media (max-width: 430px)": "2rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "2.5rem",
+    },
+    gap: {
+      default: ".5rem",
+      "@media (max-width: 430px)": ".2rem",
+      "@media (min-width: 431px) and (max-width: 768px)": ".3rem",
     },
   },
 })

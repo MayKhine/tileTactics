@@ -24,13 +24,13 @@ export const GameControlPanel = ({
 }: GameControlPanelProps) => {
   const [isChecked, setIsChecked] = useState(false)
   return (
-    <div {...stylex.props(styles.base, projectStyles.padding)}>
+    <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
         <div {...stylex.props(styles.options)}>
           <div {...stylex.props(styles.spaceBetweenContainer)}>
             <div {...stylex.props(styles.restartButtonContainer)}>
               <div
-                {...stylex.props(styles.restartButton)}
+                {...stylex.props(projectStyles.button)}
                 onClick={gameRestart}
               >
                 Restart
@@ -38,7 +38,7 @@ export const GameControlPanel = ({
             </div>
             <div {...stylex.props(styles.checkedBoxContainer)}>
               <div
-                {...stylex.props(styles.checkedBox)}
+                {...stylex.props(styles.checkedBox, projectStyles.border)}
                 onClick={() => {
                   if (!isChecked) {
                     showPossilbeMovesHandler(true)
@@ -93,75 +93,47 @@ export const GameControlPanel = ({
 
 const styles = stylex.create({
   base: {
-    minHeight: "7.5rem",
+    minHeight: "8rem",
     display: "flex",
     justifyContent: "center",
   },
   controlPanel: {
     minWidth: "20rem",
-    // backgroundColor: "pink",
   },
   options: {
-    marginBottom: "1rem",
+    marginBottom: ".5rem",
   },
   restartButtonContainer: {
-    // width: "100%",
     display: "flex",
     justifyContent: "center",
-    // marginBottom: ".5rem",
-    // backgroundColor: "red",
-    // height: "2.5rem",
-    // width: "200%",
-  },
-  restartButton: {
-    cursor: "pointer",
-    borderRadius: ".5rem",
-    border: "2px solid black",
-    padding: ".5rem",
-    backgroundColor: {
-      default: "white",
-      ":hover": "lightgray",
-    },
-    width: "max-content",
   },
   checkedBoxContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     gap: ".3rem",
-    // height: "100%",
-    // backgroundColor: "green",
   },
   checkedBox: {
     cursor: "pointer",
     height: "1rem",
     width: "1rem",
-    backgroundColor: "white",
+    backgroundColor: "#FFFBF4",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: ".2rem",
-    border: "2px solid black",
   },
   checkedMark: {
     width: "60%",
     aspectRatio: "1",
-    backgroundColor: "black",
+    backgroundColor: "#002244",
     borderRadius: "50%",
   },
   spaceBetweenContainer: {
     width: "100%",
-    // height: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // justifyContent: "center",
-    // alignItems: "center",
-
-    // backgroundColor: "white",
-  },
-  playerPoints: {
-    // backgroundColor: "white",
   },
 })
