@@ -139,11 +139,11 @@ const styles = stylex.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "50%",
-    width: "85%",
+    width: "80%",
     aspectRatio: "1",
     borderCollapse: "collapse",
     backgroundColor:
-      highlightValidMove === true ? "rgba(201, 214, 194, 0.7)" : colors.white,
+      highlightValidMove === true ? "rgba(201, 214, 194, 0.8)" : colors.white,
   }),
 
   circle: (color: string) => ({

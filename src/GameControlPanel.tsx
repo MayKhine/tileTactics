@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 import { playerMarblesType } from "./Board"
-import { projectStyles } from "./tokens.stylex"
+import { colors, projectStyles } from "./tokens.stylex"
 
 type GameControlPanelProps = {
   gameRestart: () => void
@@ -60,7 +60,9 @@ export const GameControlPanel = ({
           <div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div> Player Turn: </div>
-              <div>{user == true ? "Player 1" : "Player 2"} </div>
+              <div {...stylex.props(styles.playerColor(user))}>
+                {user == true ? "Player 1" : "Player 2"}{" "}
+              </div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div> Player 1 marbles: </div>
@@ -136,4 +138,16 @@ const styles = stylex.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  playerColor: (player1: boolean) => ({
+    backgroundColor: player1 == true ? colors.sand : colors.blue,
+    padding: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": ".2rem",
+    },
+    borderRadius: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".15rem",
+    },
+  }),
 })
