@@ -1,8 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
-import { Board, calculateXY } from "./Board"
-import { positionType } from "./Tile"
 import { useEffect, useState } from "react"
 
+import { Board } from "./Board"
+import { positionType } from "./Tile"
+import { calculateXY } from "./helperFunc"
 export type boardType = Array<tileType>
 
 export type tileType = {
@@ -214,7 +215,6 @@ export const App = () => {
       id: 9,
       rows: 1,
       cols: 3,
-      // position: { x: 350, y: 150 },
       originalPosition: {
         x: 7,
         y: 3,
@@ -226,7 +226,6 @@ export const App = () => {
       id: 10,
       rows: 1,
       cols: 3,
-      // position: { x: 150, y: 250 },
       originalPosition: {
         x: 3,
         y: 5,
@@ -238,7 +237,6 @@ export const App = () => {
       id: 11,
       rows: 2,
       cols: 3,
-      // position: { x: 300, y: 200 },
       originalPosition: {
         x: 6,
         y: 4,
@@ -250,7 +248,6 @@ export const App = () => {
       id: 12,
       rows: 2,
       cols: 2,
-      // position: { x: 50, y: 300 },
       originalPosition: {
         x: 1,
         y: 6,
@@ -262,7 +259,6 @@ export const App = () => {
       id: 13,
       rows: 2,
       cols: 1,
-      // position: { x: 150, y: 300 },
       originalPosition: {
         x: 3,
         y: 6,
@@ -274,7 +270,6 @@ export const App = () => {
       id: 14,
       rows: 2,
       cols: 2,
-      // position: { x: 200, y: 300 },
       originalPosition: {
         x: 4,
         y: 6,
@@ -286,7 +281,6 @@ export const App = () => {
       id: 15,
       rows: 3,
       cols: 2,
-      // position: { x: 300, y: 300 },
       originalPosition: {
         x: 6,
         y: 6,
@@ -298,7 +292,6 @@ export const App = () => {
       id: 16,
       rows: 1,
       cols: 2,
-      // position: { x: 100, y: 400 },
       originalPosition: {
         x: 2,
         y: 8,
@@ -310,7 +303,6 @@ export const App = () => {
       id: 17,
       rows: 2,
       cols: 2,
-      // position: { x: 200, y: 400 },
       originalPosition: {
         x: 4,
         y: 8,
@@ -493,14 +485,12 @@ export const App = () => {
   }
 
   const updatedGameBoard = updateGameBoardWithPlayerTiles(board)
-  // const updatedGameBoard2 = updateGameBoardForEachCell(updatedGameBoard)
   const updatedGameBoard3 = updateTilePosition(
     updatedGameBoard,
     positionMultiplierBasedOnWindowSize
   )
   const updateBoardTileArr = updateGameBoardForEachCell(updatedGameBoard3)
 
-  console.log(updatedGameBoard3)
   return (
     <div {...stylex.props(styles.base)}>
       <Board
@@ -515,7 +505,6 @@ export const App = () => {
 
 const styles = stylex.create({
   base: {
-    // backgroundColor: "red",
     height: "100%",
     width: "100%",
   },

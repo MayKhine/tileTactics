@@ -1,7 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
+import { tokens, projectStyles } from "./tokens.stylex"
+
 import { MarbleCell } from "./MarbleCell"
 import { boardType, TileArrType } from "./App"
-import { tokens } from "./tokens.stylex"
+
 type TileProps = {
   rows: number
   cols: number
@@ -52,7 +54,9 @@ export const Tile = ({
   positionMultiplierBasedOnWindowSize,
 }: TileProps) => {
   return (
-    <div {...stylex.props(styles.tile(rows, cols, position))}>
+    <div
+      {...stylex.props(projectStyles.border, styles.tile(rows, cols, position))}
+    >
       {Array.from({ length: rows * cols }).map((_, index) => (
         <MarbleCell
           key={id + index}
@@ -79,34 +83,12 @@ export const Tile = ({
 
 const styles = stylex.create({
   tile: (rows, cols, position) => ({
+    backgroundColor: "#FFFBF4",
     display: "grid",
     position: "absolute",
     left: position.x,
     top: position.y,
-    // left: {
-    //   default: `calc(${position.x} * ${parseInt(tokens.bigCellSize)})`,
-    //   "@media (max-width: 430px)": `calc(${position.x} * ${parseInt(
-    //     tokens.smallCellSize
-    //   )})`,
-    //   "@media (min-width: 431px) and (max-width: 768px)": `calc(${
-    //     position.x
-    //   } * ${parseInt(tokens.bigCellSize)})`,
-    // },
-    // top: {
-    //   default: `calc(${position.y} * ${parseInt(tokens.bigCellSize)})`,
-    //   "@media (max-width: 430px)": `calc(${position.y} * ${parseInt(
-    //     tokens.smallCellSize
-    //   )})`,
-    //   "@media (min-width: 431px) and (max-width: 768px)": `calc(${
-    //     position.y
-    //   } * ${parseInt(tokens.bigCellSize)})`,
-    // },
-    border: "1px solid black",
-    padding: "0",
-    margin: "0",
     boxSizing: "border-box",
-    // gridTemplaterow: `repeat(${rows},  ${tokens.bigCellSize})`,
-    // gridTemplateColumns: `repeat(${cols},${tokens.bigCellSize})`,
     gridTemplaterow: {
       default: `repeat(${rows},  ${tokens.bigCellSize})`,
       "@media (max-width: 430px)": `repeat(${rows},  ${tokens.smallCellSize})`,
@@ -127,6 +109,5 @@ const styles = stylex.create({
       "@media (max-width: 430px)": `calc(${rows} * ${tokens.smallCellSize})`,
       "@media (min-width: 431px) and (max-width: 768px)": `calc(${rows} * ${tokens.medCellSize})`,
     },
-    backgroundColor: "white",
   }),
 })

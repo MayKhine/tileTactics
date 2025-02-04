@@ -1,43 +1,17 @@
 import { useEffect, useState } from "react"
+import * as stylex from "@stylexjs/stylex"
+import { tokens } from "./tokens.stylex"
+
 import { boardType, tileType } from "./App"
 import { positionType, Tile } from "./Tile"
-import * as stylex from "@stylexjs/stylex"
 import { GameControlPanel } from "./GameControlPanel"
 import { Alert } from "./Alert"
-import { tokens } from "./tokens.stylex"
+import { calculateXY } from "./helperFunc"
 type BoardProps = {
   initialBoard: boardType
   positionMultiplierBasedOnWindowSize: number
 }
 
-export const calculateXY = (
-  index: number,
-  rows: number,
-  cols: number,
-  x: number,
-  y: number,
-  positionMultiplierBasedOnWindowSize: number
-) => {
-  let tempCol = 0
-  let tempX = x
-  let tempY = y
-
-  for (let curRow = 0; curRow < rows; curRow++) {
-    for (let curCol = 0; curCol < cols; curCol++) {
-      if (index === curCol + tempCol) {
-        // tempX = tempX + curCol * 50
-        tempX = tempX + curCol * positionMultiplierBasedOnWindowSize
-
-        return { x: tempX, y: tempY }
-      }
-    }
-    tempCol = tempCol + cols
-    // tempY = tempY + 50
-    tempY = tempY + positionMultiplierBasedOnWindowSize
-  }
-
-  return { x, y }
-}
 export type playerMarblesType = {
   player1: number
   player2: number
@@ -113,8 +87,6 @@ export const Board = ({
       player1: 28,
       player2: 28,
     })
-
-    console.log("board after reset", gameBoard[2], initialBoard[2])
   }
   const checkValidMovesLeft = (
     id: number,
@@ -133,18 +105,6 @@ export const Board = ({
             gameBoard[i].id != id &&
             lastMove.id != gameBoard[i].id)
         ) {
-          console.log(
-            "still valid",
-            positionX,
-            positionY,
-            gameBoard[i].tileArr[z].x,
-            gameBoard[i].tileArr[z].y,
-            gameBoard[i],
-            "gameboardID:",
-            gameBoard[i].id,
-            "thisid: ",
-            id
-          )
           setValidMove(true)
           return true
         }
@@ -156,7 +116,6 @@ export const Board = ({
   }
 
   const gameEndHandler = () => {
-    console.log("game end")
     setGame((prevData) => {
       return { ...prevData, gameStatus: "Over" }
     })
@@ -269,15 +228,11 @@ export const Board = ({
         if (userColor == "black") {
           const marbles = prevData.player2 - 1
           if (marbles == 0 && prevData.player1 == 0) {
-            console.log("game over")
             gameEndHandler()
           }
           return { ...prevData, player2: marbles }
         }
       })
-      // checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
-
-      // console.log("click handler end : ", gameBoard[1], lastMove, playersTiles)
 
       if (
         checkValidMovesLeft(id, selectedCellPosition.x, selectedCellPosition.y)
@@ -374,13 +329,11 @@ const styles = stylex.create({
   base: {
     width: "100%",
     height: "100%",
-    // backgroundColor: "lightyellow",
     display: "flex",
     flexDirection: "column",
   },
   gameControlPanelContainer: {
     width: "100%",
-    // backgroundColor: "orange",
   },
 
   boardContainer: {
@@ -388,13 +341,10 @@ const styles = stylex.create({
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    // backgroundColor: "green",
   },
 
   board: (gameOver: boolean) => ({
     pointerEvents: gameOver == true ? "none" : "all",
-    // backgroundColor: "pink",
-
     width: {
       default: `${Math.round((parseInt(tokens.bigCellSize) * 10) / 16)}rem`,
       "@media (max-width: 430px)": `${Math.round(
@@ -419,7 +369,6 @@ const styles = stylex.create({
   title: {
     fontSize: "2rem",
     width: "100%",
-    // backgroundColor: "white",
     textAlign: "center",
     fontWeight: "400",
     fontStyle: "normal",

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Long+Cang&family=Quicksand:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
 @stylex stylesheet;
 
 #root,
@@ -12,9 +12,6 @@ body {
   font-size: 16px;
   font-optical-sizing: auto;
   line-height: 20px;
-  background-color: rgb(150, 172, 185);
-  /* letter-spacing: 10px; */
-
-  /* background-color: pink; */
-  /* box-sizing: border-box; */
+  background-color: #faefdd;
+  color: #092c4a;
 }

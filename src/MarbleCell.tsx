@@ -1,6 +1,8 @@
+import * as stylex from "@stylexjs/stylex"
 import { boardType } from "./App"
 import { positionType } from "./Tile"
-import * as stylex from "@stylexjs/stylex"
+import { colors, projectStyles } from "./tokens.stylex"
+
 type MarbelCellProps = {
   id: number
   index: number
@@ -50,8 +52,6 @@ export const MarbleCell = ({
   showPossibleMoves,
   positionMultiplierBasedOnWindowSize,
 }: MarbelCellProps) => {
-  // console.log(position)
-
   let highlightValidMove = false
   const result = calculateXY(
     index,
@@ -62,7 +62,6 @@ export const MarbleCell = ({
     positionMultiplierBasedOnWindowSize
   )
 
-  // console.log("result: ", result, lastMove)
   if (
     (result.x == lastMove.x || result.y == lastMove.y) &&
     playersTile.red.id != id &&
@@ -86,9 +85,6 @@ export const MarbleCell = ({
     result.x === playersTile.black.x && result.y === playersTile.black.y
       ? true
       : false
-
-  // console.log("gameBoard[id - 1].tileArr[id]", gameBoard[id - 1].tileArr[index])
-  // console.log("tile color: ", tileColor)
 
   return (
     <div key={index} {...stylex.props(styles.base)}>
@@ -136,43 +132,45 @@ const styles = stylex.create({
     justifyContent: "center",
   },
   cell: (highlightValidMove: boolean) => ({
-    // border: "1px solid gray",
     margin: "0",
     boxSizing: "border-box",
     display: "flex",
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    // width: "2rem",
-    // height: "2rem",
     width: "80%",
     aspectRatio: "1",
     borderCollapse: "collapse",
-    backgroundColor: highlightValidMove === true ? "lightGreen" : "white",
+    backgroundColor:
+      highlightValidMove === true ? colors.ashGreen : colors.white,
   }),
 
   circle: (color: string) => ({
     width: {
-      default: "2rem",
+      default: "1.8rem",
       "@media (max-width: 430px)": "1rem",
-      "@media (min-width: 431px) and (max-width: 768px)": "1.5rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1.3rem",
     },
     height: {
-      default: "2rem",
+      default: "1.8rem",
       "@media (max-width: 430px)": "1rem",
-      "@media (min-width: 431px) and (max-width: 768px)": "1.5rem",
+      "@media (min-width: 431px) and (max-width: 768px)": "1.3rem",
     },
     borderRadius: "50%",
     backgroundColor:
-      color === "black" ? "black" : color === "red" ? "red" : "gray",
+      color === "black" ? colors.blue : color === "red" ? colors.sand : "gray",
     cursor: "pointer",
     boxSizing: "border-box",
   }),
 
   circleRing: {
-    // width: "70%",
-    // height: "70%",
-    border: "2px solid yellow",
+    borderWidth: {
+      default: "3px",
+      "@media (max-width: 430px)": ".08rem",
+    },
+    borderStyle: "solid",
+    borderColor: colors.darkBlue,
+
     borderRadius: "50%",
     backgroundColor: "pink",
     boxSizing: "border-box",

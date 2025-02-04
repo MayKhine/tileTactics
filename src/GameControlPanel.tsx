@@ -27,7 +27,6 @@ export const GameControlPanel = ({
     <div {...stylex.props(styles.base, projectStyles.padding)}>
       <div {...stylex.props(styles.controlPanel)}>
         <div {...stylex.props(styles.options)}>
-          {" "}
           <div {...stylex.props(styles.spaceBetweenContainer)}>
             <div {...stylex.props(styles.restartButtonContainer)}>
               <div
