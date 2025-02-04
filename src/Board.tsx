@@ -7,6 +7,7 @@ import { positionType, Tile } from "./Tile"
 import { GameControlPanel } from "./GameControlPanel"
 import { Alert } from "./Alert"
 import { calculateXY } from "./helperFunc"
+
 type BoardProps = {
   initialBoard: boardType
   positionMultiplierBasedOnWindowSize: number
@@ -26,7 +27,7 @@ export const Board = ({
   const [gameBoard, setGameBoard] = useState(deepCopy(initialBoard))
   const [validMove, setValidMove] = useState(true)
   const [showPossibleMoves, setShowPossibleMoves] = useState(false)
-  const [playerMarbles, setPlayerMarbles] = useState({
+  const [playerMarbles, setPlayerMarbles] = useState<playerMarblesType>({
     player1: 28,
     player2: 28,
   })
@@ -232,6 +233,8 @@ export const Board = ({
           }
           return { ...prevData, player2: marbles }
         }
+
+        return { ...prevData }
       })
 
       if (
@@ -346,8 +349,6 @@ const styles = stylex.create({
       "@media (max-width: 430px)": ".5rem",
       "@media (min-width: 431px) and (max-width: 768px)": "1rem",
     },
-    // alignContent: "center",
-    // alignItems: "center",
   },
 
   board: (gameOver: boolean) => ({

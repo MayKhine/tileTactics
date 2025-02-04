@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  minesweeper:
+    image: tiletactics
+    build:
+      context: ./
+    ports:
+      - "12349:80"
+    platform: linux/arm64/v8
+    restart: unless-stopped
