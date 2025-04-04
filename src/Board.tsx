@@ -7,7 +7,7 @@ import { positionType, Tile } from "./Tile"
 import { GameControlPanel } from "./GameControlPanel"
 import { Alert } from "./Alert"
 import { calculateXY } from "./helperFunc"
-
+import { InfoModal } from "./InfoModal"
 type BoardProps = {
   initialBoard: boardType
   positionMultiplierBasedOnWindowSize: number
@@ -31,6 +31,9 @@ export const Board = ({
     player1: 28,
     player2: 28,
   })
+
+  const [infoClick, setInfoClick] = useState(false)
+
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
     // gameOver: false,
@@ -285,6 +288,14 @@ export const Board = ({
           text="Game Over"
         />
       )}
+
+      {infoClick && (
+        <InfoModal
+          clickInfo={() => {
+            setInfoClick(!infoClick)
+          }}
+        />
+      )}
       <div {...stylex.props(styles.title)}>Title Tactics</div>
       <div {...stylex.props(styles.gameControlPanelContainer)}>
         <GameControlPanel
@@ -295,6 +306,10 @@ export const Board = ({
             setShowPossibleMoves(value)
           }}
           playerMarbles={playerMarbles}
+          clickInfo={() => {
+            console.log("info clicked")
+            setInfoClick(!infoClick)
+          }}
         />
       </div>
       <div {...stylex.props(styles.boardContainer)}>

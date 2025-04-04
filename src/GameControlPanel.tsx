@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 import { playerMarblesType } from "./Board"
 import { colors, projectStyles } from "./tokens.stylex"
+import { RiInformationFill } from "react-icons/ri"
 
 type GameControlPanelProps = {
   gameRestart: () => void
@@ -14,6 +15,7 @@ type GameControlPanelProps = {
   user: boolean
   showPossilbeMovesHandler: (value: boolean) => void
   playerMarbles: playerMarblesType
+  clickInfo: () => void
 }
 export const GameControlPanel = ({
   gameRestart,
@@ -21,12 +23,17 @@ export const GameControlPanel = ({
   user,
   showPossilbeMovesHandler,
   playerMarbles,
+  clickInfo,
 }: GameControlPanelProps) => {
   const [isChecked, setIsChecked] = useState(false)
   return (
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
         <div {...stylex.props(styles.options)}>
+          <div {...stylex.props(styles.iContainer)}>
+            <RiInformationFill color="black" size={30} onClick={clickInfo} />
+          </div>
+
           <div {...stylex.props(styles.spaceBetweenContainer)}>
             <div {...stylex.props(styles.restartButtonContainer)}>
               <div
@@ -131,6 +138,13 @@ const styles = stylex.create({
     backgroundColor: "#002244",
     borderRadius: "50%",
   },
+  iContainer: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "flex-end",
+    cursor: "pointer",
+  },
+
   spaceBetweenContainer: {
     width: "100%",
     display: "flex",
