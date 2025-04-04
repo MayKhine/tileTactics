@@ -7,8 +7,17 @@ type alertProps = {
 }
 export const Alert = ({ closeAlert, text }: alertProps) => {
   return (
-    <div {...stylex.props(styles.base)} onClick={closeAlert}>
-      <div {...stylex.props(styles.textBox, projectStyles.alertBorder)}>
+    <div
+      {...stylex.props(styles.base)}
+      onClick={(e) => {
+        e.stopPropagation()
+        closeAlert()
+      }}
+    >
+      <div
+        {...stylex.props(styles.textBox, projectStyles.alertBorder)}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div> {text}</div>
         <div {...stylex.props(projectStyles.button)} onClick={closeAlert}>
           Okay

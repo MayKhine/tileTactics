@@ -11,7 +11,7 @@ import { InfoModal } from "./InfoModal"
 import { Tutorial } from "./Tutorial"
 type BoardProps = {
   initialBoard: boardType
-  // initialTutorialBoard: boardType
+  initialTutorialBoard: boardType
 
   positionMultiplierBasedOnWindowSize: number
 }
@@ -23,7 +23,7 @@ export type playerMarblesType = {
 
 export const Board = ({
   initialBoard,
-  // initialTutorialBoard,
+  initialTutorialBoard,
   positionMultiplierBasedOnWindowSize,
 }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
@@ -40,7 +40,6 @@ export const Board = ({
   const [tutorial, setTutorial] = useState(false)
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
-    // gameOver: false,
     redPoints: 0,
     blackPoints: 0,
     winner: "",
@@ -131,6 +130,7 @@ export const Board = ({
     setTimeout(() => setValidMove(true), 5000)
     calculatePlayersPoint()
   }
+
   const calculatePlayersPoint = () => {
     let totalRedPoints = 0
     let totalBlackPoints = 0
@@ -303,6 +303,10 @@ export const Board = ({
 
       {tutorial && (
         <Tutorial
+          initialTutorialBoard={initialTutorialBoard}
+          positionMultiplierBasedOnWindowSize={
+            positionMultiplierBasedOnWindowSize
+          }
           clickClose={() => {
             setTutorial(!tutorial)
           }}

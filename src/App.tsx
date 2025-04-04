@@ -47,79 +47,98 @@ export const App = () => {
       ? 45
       : 50
 
-  // const tutorialBoard = [
-  //   {
-  //     id: 1,
-  //     rows: 2,
-  //     cols: 2,
-  //     originalPosition: {
-  //       x: 4,
-  //       y: 0,
-  //     },
-  //     position: { x: 0, y: 0 },
+  const tutorialBoard = [
+    {
+      id: 1,
+      rows: 2,
+      cols: 2,
+      originalPosition: {
+        x: 2,
+        y: 0,
+      },
+      position: { x: 0, y: 0 },
 
-  //     tileArr: [],
-  //   },
-  //   {
-  //     id: 2,
-  //     rows: 1,
-  //     cols: 2,
-  //     originalPosition: {
-  //       x: 0,
-  //       y: 2,
-  //     },
-  //     position: { x: 0, y: 0 },
-
-  //     tileArr: [],
-  //   },
-  //   {
-  //     id: 3,
-  //     rows: 2,
-  //     cols: 2,
-  //     originalPosition: {
-  //       x: 2,
-  //       y: 1,
-  //     },
-  //     position: { x: 0, y: 0 },
-
-  //     tileArr: [],
-  //   },
-  //   {
-  //     id: 4,
-  //     rows: 1,
-  //     cols: 2,
-  //     originalPosition: {
-  //       x: 4,
-  //       y: 2,
-  //     },
-  //     position: { x: 0, y: 0 },
-
-  //     tileArr: [],
-  //   },
-  //   {
-  //     id: 5,
-  //     rows: 3,
-  //     cols: 1,
-  //     originalPosition: {
-  //       x: 6,
-  //       y: 1,
-  //     },
-  //     position: { x: 0, y: 0 },
-  //     tileArr: [],
-  //   },
-  //   {
-  //     id: 6,
-  //     rows: 3,
-  //     cols: 2,
-  //     originalPosition: {
-  //       x: 0,
-  //       y: 3,
-  //     },
-  //     position: { x: 0, y: 0 },
-
-  //     tileArr: [],
-  //   },
-  // ]
+      tileArr: [],
+    },
+    {
+      id: 2,
+      rows: 3,
+      cols: 1,
+      originalPosition: {
+        x: 0,
+        y: 2,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 3,
+      rows: 2,
+      cols: 3,
+      // position: { x: 150, y: 150 },
+      originalPosition: {
+        x: 1,
+        y: 2,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 4,
+      rows: 1,
+      cols: 3,
+      originalPosition: {
+        x: 4,
+        y: 2,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 5,
+      rows: 1,
+      cols: 3,
+      originalPosition: {
+        x: 1,
+        y: 4,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 6,
+      rows: 3,
+      cols: 2,
+      originalPosition: {
+        x: 4,
+        y: 3,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 7,
+      rows: 2,
+      cols: 2,
+      originalPosition: {
+        x: 1,
+        y: 5,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+    {
+      id: 8,
+      rows: 2,
+      cols: 1,
+      originalPosition: {
+        x: 3,
+        y: 5,
+      },
+      position: { x: 0, y: 0 },
+      tileArr: [],
+    },
+  ]
 
   const board = [
     {
@@ -375,18 +394,19 @@ export const App = () => {
   )
   const updateBoardTileArr = updateGameBoardForEachCell(updatedGameBoard3)
 
-  // const updatedTutorialBoard = updateGameBoardWithPlayerTiles(tutorialBoard)
-  // const updatedTutorialBoard2 = updateTilePosition(
-  //   updatedTutorialBoard,
-  //   positionMultiplierBasedOnWindowSize
-  // )
+  const updatedTutorialBoard = updateGameBoardWithPlayerTiles(tutorialBoard)
+  const updatedTutorialBoard2 = updateTilePosition(
+    updatedTutorialBoard,
+    positionMultiplierBasedOnWindowSize
+  )
 
-  // const updateTutorialBoardTileArr = updateGameBoardForEachCell(
-  //   updatedTutorialBoard2
-  // )
+  const updateTutorialBoardTileArr = updateGameBoardForEachCell(
+    updatedTutorialBoard2
+  )
   return (
     <div {...stylex.props(styles.base)}>
       <Board
+        initialTutorialBoard={updateTutorialBoardTileArr}
         initialBoard={updateBoardTileArr}
         positionMultiplierBasedOnWindowSize={
           positionMultiplierBasedOnWindowSize
