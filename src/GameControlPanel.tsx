@@ -16,6 +16,7 @@ type GameControlPanelProps = {
   showPossilbeMovesHandler: (value: boolean) => void
   playerMarbles: playerMarblesType
   clickInfo: () => void
+  clickTutorial: () => void
 }
 export const GameControlPanel = ({
   gameRestart,
@@ -24,12 +25,16 @@ export const GameControlPanel = ({
   showPossilbeMovesHandler,
   playerMarbles,
   clickInfo,
+  clickTutorial,
 }: GameControlPanelProps) => {
   const [isChecked, setIsChecked] = useState(false)
   return (
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
         <div {...stylex.props(styles.options)}>
+          <div {...stylex.props(styles.tutorialDiv)} onClick={clickTutorial}>
+            <p>Tutorial</p>
+          </div>
           <div {...stylex.props(styles.iContainer)}>
             <RiInformationFill color="black" size={30} onClick={clickInfo} />
           </div>
@@ -144,7 +149,13 @@ const styles = stylex.create({
     justifyContent: "flex-end",
     cursor: "pointer",
   },
-
+  tutorialDiv: {
+    cursor: "pointer",
+    backgroundColor: "pink",
+    borderRadius: "1rem",
+    padding: ".5rem",
+    alignItems: "center",
+  },
   spaceBetweenContainer: {
     width: "100%",
     display: "flex",

@@ -8,6 +8,7 @@ import { GameControlPanel } from "./GameControlPanel"
 import { Alert } from "./Alert"
 import { calculateXY } from "./helperFunc"
 import { InfoModal } from "./InfoModal"
+import { Tutorial } from "./Tutorial"
 type BoardProps = {
   initialBoard: boardType
   positionMultiplierBasedOnWindowSize: number
@@ -33,7 +34,7 @@ export const Board = ({
   })
 
   const [infoClick, setInfoClick] = useState(false)
-
+  const [tutorial, setTutorial] = useState(false)
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
     // gameOver: false,
@@ -296,6 +297,14 @@ export const Board = ({
           }}
         />
       )}
+
+      {tutorial && (
+        <Tutorial
+          clickClose={() => {
+            setTutorial(!tutorial)
+          }}
+        ></Tutorial>
+      )}
       <div {...stylex.props(styles.title)}>Title Tactics</div>
       <div {...stylex.props(styles.gameControlPanelContainer)}>
         <GameControlPanel
@@ -309,6 +318,10 @@ export const Board = ({
           clickInfo={() => {
             console.log("info clicked")
             setInfoClick(!infoClick)
+          }}
+          clickTutorial={() => {
+            console.log("tutorial clicked")
+            setTutorial(!tutorial)
           }}
         />
       </div>
