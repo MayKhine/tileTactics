@@ -3,6 +3,7 @@ import { IoMdCloseCircle } from "react-icons/io"
 
 type TutorialProps = {
   clickClose: () => void
+  // initialTutorialBoard: boardType
 }
 export const Tutorial = ({ clickClose }: TutorialProps) => {
   return (

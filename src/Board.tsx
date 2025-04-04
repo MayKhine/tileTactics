@@ -11,6 +11,8 @@ import { InfoModal } from "./InfoModal"
 import { Tutorial } from "./Tutorial"
 type BoardProps = {
   initialBoard: boardType
+  // initialTutorialBoard: boardType
+
   positionMultiplierBasedOnWindowSize: number
 }
 
@@ -21,6 +23,7 @@ export type playerMarblesType = {
 
 export const Board = ({
   initialBoard,
+  // initialTutorialBoard,
   positionMultiplierBasedOnWindowSize,
 }: BoardProps) => {
   const [user, setUser] = useState(true) //true => red, false => black
