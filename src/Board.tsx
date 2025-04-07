@@ -44,6 +44,19 @@ export const Board = ({
     blackPoints: 0,
     winner: "",
   })
+
+  useEffect(() => {
+    // Lock background scroll when modal opens
+    if (tutorial) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "auto"
+    }
+    return () => {
+      // Restore scroll when modal unmounts
+      document.body.style.overflow = "auto"
+    }
+  }, [tutorial])
   const [playersTiles, setPlayersTile] = useState({
     red: {
       id: -1,

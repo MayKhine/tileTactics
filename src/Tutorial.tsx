@@ -23,13 +23,12 @@ export const Tutorial = ({
   const [gameBoard, setGameBoard] = useState(deepCopy(initialTutorialBoard))
   const [validMove, setValidMove] = useState(true)
   const [showPossibleMoves, setShowPossibleMoves] = useState(true)
+
   const [playerMarbles, setPlayerMarbles] = useState<playerMarblesType>({
     player1: 10,
     player2: 10,
   })
 
-  const [infoClick, setInfoClick] = useState(false)
-  const [tutorial, setTutorial] = useState(false)
   const [game, setGame] = useState({
     gameStatus: "Ready to start",
     redPoints: 0,
@@ -87,6 +86,7 @@ export const Tutorial = ({
       player2: 10,
     })
   }
+
   const checkValidMovesLeft = (
     id: number,
     positionX: number,
@@ -251,6 +251,7 @@ export const Tutorial = ({
     }
   }
 
+  const makeComputerMove = () => {}
   useEffect(() => {
     const updatedBoard = gameBoard.map((tile: tileType) => {
       return {
@@ -306,10 +307,15 @@ export const Tutorial = ({
             </div>
             {game.gameStatus != "Over" && (
               <div>
-                <div {...stylex.props(styles.spaceBetweenContainer)}>
+                <div
+                  {...stylex.props(
+                    styles.spaceBetweenContainer,
+                    styles.playerTurn
+                  )}
+                >
                   <div> Player Turn: </div>
                   <div {...stylex.props(styles.playerColor(user))}>
-                    {user == true ? "Player 1" : "Player 2"}{" "}
+                    {user == true ? "Player 1" : "Computer"}{" "}
                   </div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
@@ -317,21 +323,26 @@ export const Tutorial = ({
                   <div> {playerMarbles.player1} </div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
-                  <div> Player 2 marbles: </div>
+                  <div> Computer marbles: </div>
                   <div> {playerMarbles.player2} </div>
                 </div>
               </div>
             )}
             {game.gameStatus == "Over" && (
               <div>
-                <div {...stylex.props(styles.spaceBetweenContainer)}>
+                <div
+                  {...stylex.props(
+                    styles.spaceBetweenContainer,
+                    styles.playerTurn
+                  )}
+                >
                   <div> Winner: </div> <div> {game.winner} </div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
                   <div> Player 1: </div> <div> {game.redPoints} points</div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
-                  <div> Player 2: </div> <div> {game.blackPoints} points</div>
+                  <div> Computer: </div> <div> {game.blackPoints} points</div>
                 </div>
               </div>
             )}
@@ -409,18 +420,27 @@ const styles = stylex.create({
     paddingTop: "1rem",
     justifyContent: "flex-end",
   },
+  playerTurn: {
+    height: "2rem",
+  },
   gameInfo: {
+    minHeight: "9rem",
     // backgroundColor: "orange",
     alignContent: "center",
     // justifyItems: "center",
     width: "100%",
     paddingBottom: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: ".5rem",
   },
   centerDiv: {
     gap: ".5rem",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    height: "4rem",
+    backgroundColor: "pink",
   },
   headerFont: {
     fontSize: "1.5rem",

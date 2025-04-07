@@ -70,7 +70,9 @@ export const GameControlPanel = ({
 
         {game.gameStatus != "Over" && (
           <div>
-            <div {...stylex.props(styles.spaceBetweenContainer)}>
+            <div
+              {...stylex.props(styles.spaceBetweenContainer, styles.playerTurn)}
+            >
               <div> Player Turn: </div>
               <div {...stylex.props(styles.playerColor(user))}>
                 {user == true ? "Player 1" : "Player 2"}{" "}
@@ -89,7 +91,9 @@ export const GameControlPanel = ({
 
         {game.gameStatus == "Over" && (
           <div>
-            <div {...stylex.props(styles.spaceBetweenContainer)}>
+            <div
+              {...stylex.props(styles.spaceBetweenContainer, styles.playerTurn)}
+            >
               <div> Winner: </div> <div> {game.winner} </div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
@@ -107,7 +111,7 @@ export const GameControlPanel = ({
 
 const styles = stylex.create({
   base: {
-    minHeight: "8rem",
+    minHeight: "9rem",
     display: "flex",
     justifyContent: "center",
   },
@@ -136,6 +140,9 @@ const styles = stylex.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: ".2rem",
+  },
+  playerTurn: {
+    height: "2rem",
   },
   checkedMark: {
     width: "60%",
