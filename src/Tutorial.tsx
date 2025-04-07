@@ -13,6 +13,12 @@ type TutorialProps = {
   initialTutorialBoard: boardType
   positionMultiplierBasedOnWindowSize: number
 }
+
+type validMove = {
+  tileId: number
+  cellIndex: number
+  position: positionType
+}
 export const Tutorial = ({
   clickClose,
   initialTutorialBoard,
@@ -251,7 +257,72 @@ export const Tutorial = ({
     }
   }
 
-  const makeComputerMove = () => {}
+  const makeComputerMove = () => {
+    const moves = getAllValidMoves()
+    console.log("makeComputerMove", moves)
+  }
+
+  const getAllValidMoves = () => {
+    const validMoves: Array<validMove> = []
+    for (let i = 0; i < gameBoard.length; i++) {
+      const tile = gameBoard[i]
+
+      // Skip if it's the same tile as the opponent's last move or the player's own tile
+      if (tile.id === playersTiles.red.id || tile.id === lastMove.id) continue
+      // console.log("tile: ", tile)
+      for (let j = 0; j < tile.tileArr.length; j++) {
+        const cell = tile.tileArr[j]
+
+        if (cell.owner.length !== 0) continue // Skip occupied cells
+        // console.log("cell: ", cell)
+        const cellPosition = calculateXY(
+          j,
+          tile.rows,
+          tile.cols,
+          tile.position.x,
+          tile.position.y,
+          // tile.position.x / positionMultiplierBasedOnWindowSize,
+          // tile.position.y / positionMultiplierBasedOnWindowSize,
+          positionMultiplierBasedOnWindowSize
+        )
+
+        const canMove =
+          lastMove.x === -1 ||
+          lastMove.y === -1 ||
+          cellPosition.x === lastMove.x ||
+          cellPosition.y === lastMove.y
+
+        // console.log(
+        //   "canmove: ",
+        //   canMove,
+        //   "lastmove",
+        //   lastMove.x,
+        //   lastMove.y,
+        //   "cell postiion: ",
+        //   cellPosition.x,
+        //   cellPosition.y
+        // )
+        if (canMove) {
+          validMoves.push({
+            tileId: tile.id,
+            cellIndex: j,
+            position: tile.position,
+          })
+        }
+      }
+    }
+
+    return validMoves
+  }
+  useEffect(() => {
+    if (!user && game.gameStatus !== "Over") {
+      // Delay to simulate thinking time
+      setTimeout(() => {
+        makeComputerMove()
+      }, 500)
+    }
+  }, [user, game])
+
   useEffect(() => {
     const updatedBoard = gameBoard.map((tile: tileType) => {
       return {
