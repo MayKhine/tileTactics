@@ -57,6 +57,7 @@ export const Tutorial = ({
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
   const gameRestart = () => {
+    setShowPossibleMoves(!showPossibleMoves)
     setUser(true)
     setValidMove(true)
     setGameBoard(deepCopy(initialTutorialBoard))
@@ -121,6 +122,7 @@ export const Tutorial = ({
   }
 
   const gameEndHandler = () => {
+    setShowPossibleMoves(!showPossibleMoves)
     setGame((prevData) => {
       return { ...prevData, gameStatus: "Over" }
     })
@@ -260,6 +262,16 @@ export const Tutorial = ({
   const makeComputerMove = () => {
     const moves = getAllValidMoves()
     console.log("makeComputerMove", moves)
+    const randomMove = moves[Math.floor(Math.random() * moves.length)]
+    console.log("Rnadom move: ", randomMove)
+
+    clickHandler(
+      randomMove.tileId,
+      randomMove.cellIndex,
+      gameBoard[randomMove.tileId - 1].rows,
+      gameBoard[randomMove.tileId - 1].cols,
+      randomMove.position
+    )
   }
 
   const getAllValidMoves = () => {
@@ -272,7 +284,12 @@ export const Tutorial = ({
       // console.log("tile: ", tile)
       for (let j = 0; j < tile.tileArr.length; j++) {
         const cell = tile.tileArr[j]
-
+        console.log(playersTiles, cell)
+        if (
+          tile.id === playersTiles.black.id ||
+          tile.id === playersTiles.red.id
+        )
+          continue
         if (cell.owner.length !== 0) continue // Skip occupied cells
         // console.log("cell: ", cell)
         const cellPosition = calculateXY(
@@ -291,7 +308,6 @@ export const Tutorial = ({
           lastMove.y === -1 ||
           cellPosition.x === lastMove.x ||
           cellPosition.y === lastMove.y
-
         // console.log(
         //   "canmove: ",
         //   canMove,
@@ -377,13 +393,8 @@ export const Tutorial = ({
               </div>
             </div>
             {game.gameStatus != "Over" && (
-              <div>
-                <div
-                  {...stylex.props(
-                    styles.spaceBetweenContainer,
-                    styles.playerTurn
-                  )}
-                >
+              <div {...stylex.props(styles.gamePlayerInfo)}>
+                <div {...stylex.props(styles.spaceBetweenContainer)}>
                   <div> Player Turn: </div>
                   <div {...stylex.props(styles.playerColor(user))}>
                     {user == true ? "Player 1" : "Computer"}{" "}
@@ -391,29 +402,37 @@ export const Tutorial = ({
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
                   <div> Player 1 marbles: </div>
-                  <div> {playerMarbles.player1} </div>
+                  <div {...stylex.props(styles.blue)}>
+                    {playerMarbles.player1}
+                  </div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
                   <div> Computer marbles: </div>
-                  <div> {playerMarbles.player2} </div>
+                  <div {...stylex.props(styles.sand)}>
+                    {playerMarbles.player2}
+                  </div>
                 </div>
               </div>
             )}
             {game.gameStatus == "Over" && (
-              <div>
-                <div
-                  {...stylex.props(
-                    styles.spaceBetweenContainer,
-                    styles.playerTurn
-                  )}
-                >
-                  <div> Winner: </div> <div> {game.winner} </div>
+              <div {...stylex.props(styles.gamePlayerInfo)}>
+                <div {...stylex.props(styles.spaceBetweenContainer)}>
+                  <div> Winner: </div>
+                  <div {...stylex.props(styles.playerColor(user))}>
+                    {game.winner}
+                  </div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
-                  <div> Player 1: </div> <div> {game.redPoints} points</div>
+                  <div> Player 1: </div>
+                  <div {...stylex.props(styles.blue)}>
+                    {game.redPoints} points
+                  </div>
                 </div>
                 <div {...stylex.props(styles.spaceBetweenContainer)}>
-                  <div> Computer: </div> <div> {game.blackPoints} points</div>
+                  <div> Computer: </div>
+                  <div {...stylex.props(styles.sand)}>
+                    {game.blackPoints} points
+                  </div>
                 </div>
               </div>
             )}
@@ -453,7 +472,7 @@ export const Tutorial = ({
 
 const styles = stylex.create({
   popup: {
-    backgroundColor: "rgba(0, 0, 0, .5)",
+    backgroundColor: "rgba(0, 0, 0, .3)",
     width: "100%",
     height: "100%",
     zIndex: "10",
@@ -524,6 +543,34 @@ const styles = stylex.create({
     justifyContent: "center",
     maxHeight: "100%",
   },
+  blue: {
+    textAlign: "right",
+    width: "3.6rem",
+    backgroundColor: "#499ED6",
+    padding: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": ".2rem",
+    },
+    borderRadius: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".15rem",
+    },
+  },
+  sand: {
+    textAlign: "right",
+    width: "3.6rem",
+    backgroundColor: "#DA9665",
+    padding: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": ".2rem",
+    },
+    borderRadius: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".15rem",
+    },
+  },
   board: (gameOver: boolean) => ({
     pointerEvents: gameOver == true ? "none" : "all",
     width: {
@@ -555,6 +602,8 @@ const styles = stylex.create({
     alignItems: "center",
   },
   playerColor: (player1: boolean) => ({
+    textAlign: "right",
+    width: "3.6rem",
     backgroundColor: player1 == true ? colors.sand : colors.blue,
     padding: {
       default: ".3rem",
@@ -566,4 +615,9 @@ const styles = stylex.create({
       "@media (max-width: 430px)": ".15rem",
     },
   }),
+  gamePlayerInfo: {
+    display: "flex",
+    flexDirection: "column",
+    gap: ".2rem",
+  },
 })

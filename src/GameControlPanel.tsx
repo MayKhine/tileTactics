@@ -69,38 +69,40 @@ export const GameControlPanel = ({
         </div>
 
         {game.gameStatus != "Over" && (
-          <div>
-            <div
-              {...stylex.props(styles.spaceBetweenContainer, styles.playerTurn)}
-            >
+          <div {...stylex.props(styles.gamePlayerInfo)}>
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div> Player Turn: </div>
               <div {...stylex.props(styles.playerColor(user))}>
-                {user == true ? "Player 1" : "Player 2"}{" "}
+                {user == true ? "Player 1" : "Player 2"}
               </div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div> Player 1 marbles: </div>
-              <div> {playerMarbles.player1} </div>
+              <div {...stylex.props(styles.blue)}>{playerMarbles.player1}</div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div> Player 2 marbles: </div>
-              <div> {playerMarbles.player2} </div>
+              <div {...stylex.props(styles.sand)}>{playerMarbles.player2}</div>
             </div>
           </div>
         )}
 
         {game.gameStatus == "Over" && (
-          <div>
+          <div {...stylex.props(styles.gamePlayerInfo)}>
             <div
               {...stylex.props(styles.spaceBetweenContainer, styles.playerTurn)}
             >
               <div> Winner: </div> <div> {game.winner} </div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
-              <div> Player 1: </div> <div> {game.redPoints} points</div>
+              <div> Player 1: </div>
+              <div {...stylex.props(styles.sand)}> {game.redPoints} points</div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
-              <div> Player 2: </div> <div> {game.blackPoints} points</div>
+              <div> Player 2: </div>
+              <div {...stylex.props(styles.sand)}>
+                {game.blackPoints} points
+              </div>
             </div>
           </div>
         )}
@@ -116,7 +118,7 @@ const styles = stylex.create({
     justifyContent: "center",
   },
   controlPanel: {
-    minWidth: "20rem",
+    minWidth: "25rem",
   },
   options: {
     marginBottom: ".5rem",
@@ -141,9 +143,7 @@ const styles = stylex.create({
     alignItems: "center",
     borderRadius: ".2rem",
   },
-  playerTurn: {
-    height: "2rem",
-  },
+
   checkedMark: {
     width: "60%",
     aspectRatio: "1",
@@ -171,6 +171,8 @@ const styles = stylex.create({
     alignItems: "center",
   },
   playerColor: (player1: boolean) => ({
+    textAlign: "right",
+    minWidth: "3.6rem",
     backgroundColor: player1 == true ? colors.sand : colors.blue,
     padding: {
       default: ".3rem",
@@ -182,4 +184,37 @@ const styles = stylex.create({
       "@media (max-width: 430px)": ".15rem",
     },
   }),
+  blue: {
+    textAlign: "right",
+    width: "3.6rem",
+    backgroundColor: "#499ED6",
+    padding: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": ".2rem",
+    },
+    borderRadius: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".15rem",
+    },
+  },
+  sand: {
+    textAlign: "right",
+    width: "3.6rem",
+    backgroundColor: "#DA9665",
+    padding: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".1rem",
+      "@media (min-width: 431px) and (max-width: 768px)": ".2rem",
+    },
+    borderRadius: {
+      default: ".3rem",
+      "@media (max-width: 430px)": ".15rem",
+    },
+  },
+  gamePlayerInfo: {
+    display: "flex",
+    flexDirection: "column",
+    gap: ".2rem",
+  },
 })
