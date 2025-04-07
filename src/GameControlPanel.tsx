@@ -2,7 +2,6 @@ import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 import { playerMarblesType } from "./Board"
 import { colors, projectStyles } from "./tokens.stylex"
-import { RiInformationFill } from "react-icons/ri"
 
 type GameControlPanelProps = {
   gameRestart: () => void
@@ -32,11 +31,21 @@ export const GameControlPanel = ({
     <div {...stylex.props(styles.base)}>
       <div {...stylex.props(styles.controlPanel)}>
         <div {...stylex.props(styles.options)}>
-          <div {...stylex.props(styles.tutorialDiv)} onClick={clickTutorial}>
-            <p>Tutorial</p>
-          </div>
-          <div {...stylex.props(styles.iContainer)}>
-            <RiInformationFill color="black" size={30} onClick={clickInfo} />
+          <div
+            {...stylex.props(
+              styles.tutorialHowToPlayContainer,
+              styles.spaceBetweenContainer
+            )}
+          >
+            <div
+              {...stylex.props(projectStyles.button)}
+              onClick={clickTutorial}
+            >
+              Tutorial
+            </div>
+            <div {...stylex.props(projectStyles.button)} onClick={clickInfo}>
+              How To Win
+            </div>
           </div>
 
           <div {...stylex.props(styles.spaceBetweenContainer)}>
@@ -89,9 +98,7 @@ export const GameControlPanel = ({
 
         {game.gameStatus == "Over" && (
           <div {...stylex.props(styles.gamePlayerInfo)}>
-            <div
-              {...stylex.props(styles.spaceBetweenContainer, styles.playerTurn)}
-            >
+            <div {...stylex.props(styles.spaceBetweenContainer)}>
               <div> Winner: </div> <div> {game.winner} </div>
             </div>
             <div {...stylex.props(styles.spaceBetweenContainer)}>
@@ -150,12 +157,7 @@ const styles = stylex.create({
     backgroundColor: "#002244",
     borderRadius: "50%",
   },
-  iContainer: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "flex-end",
-    cursor: "pointer",
-  },
+
   tutorialDiv: {
     cursor: "pointer",
     backgroundColor: "pink",
@@ -216,5 +218,9 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     gap: ".2rem",
+  },
+  tutorialHowToPlayContainer: {
+    display: "flex",
+    marginBottom: ".5rem",
   },
 })

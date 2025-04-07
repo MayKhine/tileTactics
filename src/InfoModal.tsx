@@ -114,11 +114,20 @@ const styles = stylex.create({
   },
   baseDiv: {
     backgroundColor: "#FFFBF4",
-    width: "60%",
-    height: "80%",
+
     display: "flex",
     flexDirection: "column",
     borderRadius: "1rem",
+    width: {
+      default: "70%",
+      "@media (max-width: 768px)": "100%",
+    },
+    height: {
+      default: "80%",
+      "@media (max-height: 700px)": "100%",
+    },
+    maxWidth: "50rem",
+    maxHeight: "50rem",
   },
   scrollDiv: {
     overflowY: "auto",

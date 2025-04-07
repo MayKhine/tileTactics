@@ -57,7 +57,7 @@ export const Tutorial = ({
   const [lastMove, setLastMove] = useState({ x: -1, y: -1, id: -1 })
 
   const gameRestart = () => {
-    setShowPossibleMoves(!showPossibleMoves)
+    setShowPossibleMoves(true)
     setUser(true)
     setValidMove(true)
     setGameBoard(deepCopy(initialTutorialBoard))
@@ -489,21 +489,19 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     borderRadius: "1rem",
-    padding: "1rem",
     width: {
       default: "70%",
       "@media (max-width: 768px)": "100%",
     },
     height: {
-      default: "70%",
+      default: "80%",
       "@media (max-height: 700px)": "100%",
     },
     maxWidth: "50rem",
     maxHeight: "50rem",
   },
-  scrollDiv: { overflow: "auto" },
+  scrollDiv: { overflowY: "auto", margin: "2rem", paddingBottom: "0rem" },
   closeIconDiv: {
-    // backgroundColor: "pink",
     cursor: "pointer",
     display: "flex",
     paddingRight: "1.5rem",
@@ -530,15 +528,14 @@ const styles = stylex.create({
     flexDirection: "column",
     alignItems: "center",
     height: "4rem",
-    backgroundColor: "pink",
   },
   headerFont: {
     fontSize: "1.5rem",
     fontWeight: "400",
     fontStyle: "normal",
+    marginBottom: ".5rem",
   },
   boardContainer: {
-    backgroundColor: "pink",
     display: "flex",
     justifyContent: "center",
     maxHeight: "100%",
@@ -591,6 +588,7 @@ const styles = stylex.create({
         (parseInt(tokens.medCellSize) * 7) / 16
       )}rem`,
     },
+    maxWidth: "100%",
     position: "relative",
     boxSizing: "border-box",
   }),
@@ -603,7 +601,7 @@ const styles = stylex.create({
   },
   playerColor: (player1: boolean) => ({
     textAlign: "right",
-    width: "3.6rem",
+    minWidth: "3.6rem",
     backgroundColor: player1 == true ? colors.sand : colors.blue,
     padding: {
       default: ".3rem",
